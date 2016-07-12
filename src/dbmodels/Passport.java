@@ -1,6 +1,7 @@
-package main.java.dbmodels;
+package dbmodels;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 public class Passport {
 
@@ -14,6 +15,15 @@ public class Passport {
     public Passport(int id, int clientId, int number, String series,
                     String issuingAuthority, Date dateOfIssue) {
         this.id = id;
+        this.clientId = clientId;
+        this.number = number;
+        this.series = series;
+        this.issuingAuthority = issuingAuthority;
+        this.dateOfIssue = dateOfIssue;
+    }
+
+    public Passport(int clientId, int number, String series,
+                    String issuingAuthority, Date dateOfIssue) {
         this.clientId = clientId;
         this.number = number;
         this.series = series;

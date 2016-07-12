@@ -1,6 +1,7 @@
-package main.java.dbmodels;
+package dbmodels;
 
-import java.util.Date;
+
+import java.sql.Date;
 
 public class Card {
     private int id;
@@ -8,18 +9,24 @@ public class Card {
     private String number;
     private int pinCode;
     private Date expirationDate;
+    private CardStandard cardStandard;
 
 
-    private enum standart {VISA, MASTERCARD, UKRCARD, AMERICAN_EXPRES, MAESTRO}
-
-
-    public Card(int id, int accountId, String number, int pinCode,
-                Date expirationDate) {
+    public Card(int id, int accountId, String number, int pinCode, Date expirationDate, CardStandard cardStandard) {
         this.id = id;
         this.accountId = accountId;
         this.number = number;
         this.pinCode = pinCode;
         this.expirationDate = expirationDate;
+        this.cardStandard = cardStandard;
+    }
+
+    public Card(int accountId, String number, int pinCode, Date expirationDate, CardStandard cardStandard) {
+        this.accountId = accountId;
+        this.number = number;
+        this.pinCode = pinCode;
+        this.expirationDate = expirationDate;
+        this.cardStandard = cardStandard;
     }
 
     public int getId() {
@@ -60,5 +67,13 @@ public class Card {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public CardStandard getCardStandard() {
+        return cardStandard;
+    }
+
+    public void setCardStandard(CardStandard cardStandard) {
+        this.cardStandard = cardStandard;
     }
 }

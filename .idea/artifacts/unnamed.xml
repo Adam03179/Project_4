@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="unnamed">
+    <output-path>$PROJECT_DIR$/out/artifacts/unnamed</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="jstl-1.2" />
+          <element id="library" level="project" name="log4j-1.2.17" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.39-bin" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

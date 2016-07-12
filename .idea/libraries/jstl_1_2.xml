@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="apache-log4j-2.6">
+  <library name="jstl-1.2">
     <CLASSES>
-      <root url="file://$USER_HOME$/Desktop/apache-log4j-2.6.2-bin" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/jstl-1.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -1,4 +1,4 @@
-package main.java.dbmodels;
+package dbmodels;
 
 public class Contacts {
     private int id;
@@ -18,6 +18,22 @@ public class Contacts {
                     String numOfHouse, String numOfApartment,
                     String telephoneNum, String email) {
         this.id = id;
+        this.clientId = clientId;
+        this.postCode = postCode;
+        this.country = country;
+        this.region = region;
+        this.city = city;
+        this.street = street;
+        this.numOfHouse = numOfHouse;
+        this.numOfApartment = numOfApartment;
+        this.telephoneNum = telephoneNum;
+        this.email = email;
+    }
+
+    public Contacts(int clientId, int postCode, String country,
+                    String region, String city, String street,
+                    String numOfHouse, String numOfApartment,
+                    String telephoneNum, String email) {
         this.clientId = clientId;
         this.postCode = postCode;
         this.country = country;

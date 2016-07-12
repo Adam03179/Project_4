@@ -1,4 +1,4 @@
-package main.java.dbmodels;
+package dbmodels;
 
 public class Client {
     private int id;
@@ -11,6 +11,14 @@ public class Client {
     public Client(int id, String name, String surname,
                   String individualTaxNumber, String logIn, String password) {
         this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.individualTaxNumber = individualTaxNumber;
+        this.logIn = logIn;
+        this.password = password;
+    }
+
+    public Client(String name, String surname, String individualTaxNumber, String logIn, String password) {
         this.name = name;
         this.surname = surname;
         this.individualTaxNumber = individualTaxNumber;

@@ -1,7 +1,6 @@
-package main.java.dbmodels;
+package dbmodels;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 public class Account {
     private int id;
@@ -9,12 +8,13 @@ public class Account {
     private String number;
     private double interest;
     private Date openDate;
-    private BigDecimal balance;
+    private double balance;
     private String currency;
     private boolean isBlocked;
 
+
     public Account(int id, int clientId, String number, double interest,
-                   Date openDate, BigDecimal balance, String currency) {
+                   Date openDate, double balance, String currency, boolean isBlocked) {
         this.id = id;
         this.clientId = clientId;
         this.number = number;
@@ -22,7 +22,17 @@ public class Account {
         this.openDate = openDate;
         this.balance = balance;
         this.currency = currency;
-        this.isBlocked = false;
+        this.isBlocked = isBlocked;
+    }
+
+    public Account(int clientId, String number, double interest, Date openDate, double balance, String currency, boolean isBlocked) {
+        this.clientId = clientId;
+        this.number = number;
+        this.interest = interest;
+        this.openDate = openDate;
+        this.balance = balance;
+        this.currency = currency;
+        this.isBlocked = isBlocked;
     }
 
     public int getId() {
@@ -65,11 +75,11 @@ public class Account {
         this.openDate = openDate;
     }
 
-    public BigDecimal getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -79,5 +89,13 @@ public class Account {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean isBlocked) {
+        this.isBlocked = isBlocked;
     }
 }
