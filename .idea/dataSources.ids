@@ -42,6 +42,7 @@
       <column name="individual_tax_number" sqlType="CHAR" precision="10" scale="0" nullable="true" jdbcType="1"/>
       <column name="password" sqlType="VARCHAR" precision="24" scale="0" nullable="false" jdbcType="12"/>
       <column name="log_in" sqlType="VARCHAR" precision="15" scale="0" nullable="false" jdbcType="12"/>
+      <column name="is_admin" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
       <primary-key name="PRIMARY" columns="clients_id"/>
       <exported-key name="accounts_ibfk_1" table="accounts" schema="" catalog="payments" columns="clients_id"/>
       <exported-key name="contacts_ibfk_1" table="contacts" schema="" catalog="payments" columns="clients_id"/>

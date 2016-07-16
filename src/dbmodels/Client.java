@@ -7,15 +7,17 @@ public class Client {
     private String individualTaxNumber;
     private String logIn;
     private String password;
+    private boolean isAdmin;
 
     public Client(int id, String name, String surname,
-                  String individualTaxNumber, String logIn, String password) {
+                  String individualTaxNumber, String logIn, String password, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.individualTaxNumber = individualTaxNumber;
         this.logIn = logIn;
         this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public Client(String name, String surname, String individualTaxNumber, String logIn, String password) {
@@ -72,5 +74,13 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

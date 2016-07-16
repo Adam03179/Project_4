@@ -74,8 +74,9 @@ public class DAOClient {
             String name = result.getString("name");
             String surname = result.getString("surname");
             String individualTaxNumber = result.getString("individual_tax_number");
+            boolean isAdmin = result.getBoolean("is_admin");
 
-            return new Client(id, name, surname, individualTaxNumber, logIn, password);
+            return new Client(id, name, surname, individualTaxNumber, logIn, password,isAdmin);
 
         } catch (SQLException e) {
             logger.error("get client error", e);
