@@ -1,6 +1,6 @@
 package dao;
 
-import dbmodels.Client;
+import dbmodels.User;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class DAOClient {
+public class DAOUser {
 
     private DataSource dataSource;
     private static final Logger logger = Logger.getLogger(DAOCard.class);
@@ -18,39 +18,39 @@ public class DAOClient {
             ResourceBundle.getBundle("requestsql");
 
 
-    public DAOClient(DataSource dataSource) {
+    public DAOUser(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
 
-    public boolean addClient(Client client) {
+    public boolean addClient(User user) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psAddClient = connection.prepareStatement
                     (resourceBundle.getString("ADD_CLIENT"));
 
-            psAddClient.setString(1, client.getName());
-            psAddClient.setString(2, client.getSurname());
-            psAddClient.setString(3, client.getIndividualTaxNumber());
-            psAddClient.setString(4, client.getLogIn());
-            psAddClient.setString(5, client.getPassword());
+            psAddClient.setString(1, user.getName());
+            psAddClient.setString(2, user.getSurname());
+            psAddClient.setString(3, user.getIndividualTaxNumber());
+            psAddClient.setString(4, user.getLogIn());
+            psAddClient.setString(5, user.getPassword());
 
             return true;
 
         } catch (SQLException e) {
-            logger.error("add client error", e);
+            logger.error("add user error", e);
             return false;
         }
 
     }
 
-    public boolean changePassword(Client client, String newPassword) {
+    public boolean changePassword(User user, String newPassword) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psChangePassword = connection.prepareStatement
                     (resourceBundle.getString("CHANGE_PASSWORD"));
             psChangePassword.setString(1, newPassword);
-            psChangePassword.setInt(2, client.getId());
+            psChangePassword.setInt(2, user.getId());
             return true;
 
         } catch (SQLException e) {
@@ -60,7 +60,7 @@ public class DAOClient {
 
     }
 
-    public Client getClient(String logIn, String password) {
+    public User getClient(String logIn, String password) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psChangePassword = connection.prepareStatement
@@ -76,7 +76,7 @@ public class DAOClient {
             String individualTaxNumber = result.getString("individual_tax_number");
             boolean isAdmin = result.getBoolean("is_admin");
 
-            return new Client(id, name, surname, individualTaxNumber, logIn, password,isAdmin);
+            return new User(id, name, surname, individualTaxNumber, logIn, password,isAdmin);
 
         } catch (SQLException e) {
             logger.error("get client error", e);

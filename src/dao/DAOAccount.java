@@ -2,7 +2,7 @@ package dao;
 
 import dbmodels.Account;
 import dbmodels.AccountHistory;
-import dbmodels.Client;
+import dbmodels.User;
 import dbmodels.OperationType;
 import org.apache.log4j.Logger;
 
@@ -109,13 +109,13 @@ public class DAOAccount {
     }
 
 
-    public List<Account> getAllAccounts(Client client) {
+    public List<Account> getAllAccounts(User user) {
         List<Account> accounts = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psGetAllAccounts = connection.prepareStatement
                     (resourceBundle.getString("GET_ALL_ACCOUNTS"));
-            psGetAllAccounts.setInt(1, client.getId());
+            psGetAllAccounts.setInt(1, user.getId());
 
             ResultSet resultSet = psGetAllAccounts.executeQuery();
 

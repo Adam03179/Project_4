@@ -40,8 +40,8 @@ public class DAOFactory {
         return new DAOCard(dataSource);
     }
 
-    public DAOClient getDAOClient() {
-        return new DAOClient(dataSource);
+    public DAOUser getDAOClient() {
+        return new DAOUser(dataSource);
     }
 
     public DAOContacts getDAOContacts() {

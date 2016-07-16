@@ -10,7 +10,7 @@
 <html>
 <head>
     <title><fmt:message key="LOGIN"/></title>
-    <link href="../css/index.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
 </head>
 <body>
 
@@ -23,11 +23,12 @@
         <label for="password-field"></label>
         <input type="password" name="password" id="password-field" placeholder=<fmt:message key="PASSWORD"/>>
         <br>
+        <input type="hidden" name="Confirm" value="login"/>
         <input type="submit" value=<fmt:message key="ENTER"/>>
     </div>
 </form>
 <div class="link">
-    <a href="user/registration.jsp" data-hover="<fmt:message key="REGISTRATION"/>">
+    <a href="jsp/user/registration.jsp" data-hover="<fmt:message key="REGISTRATION"/>">
         <span><fmt:message key="REGISTRATION"/></span>
     </a>
 </div>

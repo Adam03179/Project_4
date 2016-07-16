@@ -1,6 +1,6 @@
 package dao;
 
-import dbmodels.Client;
+import dbmodels.User;
 import dbmodels.Passport;
 import org.apache.log4j.Logger;
 
@@ -37,13 +37,13 @@ public class DAOPassport {
         }
     }
 
-    public Passport getPassport(Client client) {
+    public Passport getPassport(User user) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psGetPAssport = connection.prepareStatement
                     (resourceBundle.getString("GET_PASSPORT"));
 
-            psGetPAssport.setInt(1, client.getId());
+            psGetPAssport.setInt(1, user.getId());
 
             ResultSet resultSet = psGetPAssport.executeQuery();
 

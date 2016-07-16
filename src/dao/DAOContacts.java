@@ -1,6 +1,6 @@
 package dao;
 
-import dbmodels.Client;
+import dbmodels.User;
 import dbmodels.Contacts;
 import org.apache.log4j.Logger;
 
@@ -46,14 +46,14 @@ public class DAOContacts {
 
     }
 
-    public List<Contacts> getContacts(Client client) {
+    public List<Contacts> getContacts(User user) {
 
         List<Contacts> contacts = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psGetContacts = connection.prepareStatement
                     (resourceBundle.getString("GET_CONTACTS"));
-            psGetContacts.setInt(1, client.getId());
+            psGetContacts.setInt(1, user.getId());
 
             ResultSet resultSet = psGetContacts.executeQuery();
 

@@ -4,11 +4,33 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-
     <welcome-file-list>
-        <welcome-file>/jsp/index.jsp</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/WEB-INF/img/*</url-pattern>
+        <url-pattern>*.ico</url-pattern>
+        <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.ttf</url-pattern>
+        <url-pattern>*.svg</url-pattern>
+        <url-pattern>*.eot</url-pattern>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>Handler</servlet-name>
+        <servlet-class>controllers.Handler</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Handler</servlet-name>
+        <url-pattern>/handler</url-pattern>
+    </servlet-mapping>
 
     <!--DB Connection begin-->
     <resource-ref>

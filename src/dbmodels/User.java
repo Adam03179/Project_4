@@ -1,6 +1,6 @@
 package dbmodels;
 
-public class Client {
+public class User {
     private int id;
     private String name;
     private String surname;
@@ -9,8 +9,8 @@ public class Client {
     private String password;
     private boolean isAdmin;
 
-    public Client(int id, String name, String surname,
-                  String individualTaxNumber, String logIn, String password, boolean isAdmin) {
+    public User(int id, String name, String surname,
+                String individualTaxNumber, String logIn, String password, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -20,7 +20,7 @@ public class Client {
         this.isAdmin = isAdmin;
     }
 
-    public Client(String name, String surname, String individualTaxNumber, String logIn, String password) {
+    public User(String name, String surname, String individualTaxNumber, String logIn, String password) {
         this.name = name;
         this.surname = surname;
         this.individualTaxNumber = individualTaxNumber;
