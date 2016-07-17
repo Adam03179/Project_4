@@ -40,7 +40,7 @@ public class DAOFactory {
         return new DAOCard(dataSource);
     }
 
-    public DAOUser getDAOClient() {
+    public DAOUser getDAOUser() {
         return new DAOUser(dataSource);
     }
 

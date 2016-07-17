@@ -34,6 +34,7 @@ public class CommandFactory {
     static {
 
         commandMap.put("login", new LoginCommand());
+        commandMap.put("changeLanguage", new ChangeLanguageCommand());
 
     }
 

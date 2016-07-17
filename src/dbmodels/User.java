@@ -9,6 +9,9 @@ public class User {
     private String password;
     private boolean isAdmin;
 
+    public User() {
+    }
+
     public User(int id, String name, String surname,
                 String individualTaxNumber, String logIn, String password, boolean isAdmin) {
         this.id = id;

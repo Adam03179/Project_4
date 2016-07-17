@@ -27,7 +27,7 @@ public class DAOUser {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psAddClient = connection.prepareStatement
-                    (resourceBundle.getString("ADD_CLIENT"));
+                    (resourceBundle.getString("ADD_USER"));
 
             psAddClient.setString(1, user.getName());
             psAddClient.setString(2, user.getSurname());
@@ -54,7 +54,7 @@ public class DAOUser {
             return true;
 
         } catch (SQLException e) {
-            logger.error("change password error", e);
+       //     logger.error("change password error", e);
             return false;
         }
 
@@ -64,7 +64,7 @@ public class DAOUser {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psChangePassword = connection.prepareStatement
-                    (resourceBundle.getString("GET_CLIENT"));
+                    (resourceBundle.getString("GET_USER"));
 
             psChangePassword.setString(1, logIn);
             psChangePassword.setString(2, password);
@@ -79,9 +79,31 @@ public class DAOUser {
             return new User(id, name, surname, individualTaxNumber, logIn, password,isAdmin);
 
         } catch (SQLException e) {
-            logger.error("get client error", e);
+        //    logger.error("get user error", e);
             return null;
         }
+
+    }
+
+    public boolean isExist(User user){
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psIsExist = connection.prepareStatement
+                    (resourceBundle.getString("USER_IS_EXIST"));
+
+            psIsExist.setString(1,user.getLogIn());
+            psIsExist.setString(2,user.getPassword());
+
+
+            ResultSet resultSet = psIsExist.executeQuery();
+
+            return resultSet.next();
+
+        } catch (SQLException e) {
+        //    logger.error("is exist user error", e);
+            return false;
+        }
+
+
 
     }
 

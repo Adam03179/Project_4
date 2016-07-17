@@ -32,7 +32,7 @@ public class DAOPassport {
             return true;
 
         } catch (SQLException e) {
-            logger.error("add passport error", e);
+          logger.error("add passport error", e);
             return false;
         }
     }
