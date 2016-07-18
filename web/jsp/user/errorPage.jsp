@@ -22,7 +22,7 @@
         }
         .title h1{
             font-size:100px;
-            color:yellow;
+            color: #b6cde9;
             text-align:center;
             margin-top:100px;
             text-shadow:6px 1px 6px #333;
@@ -30,7 +30,7 @@
         }
         .title h2{
             font-size:100px;
-            color:yellow;
+            color: #b6cde9;
             text-align:center;
             margin-bottom:1px;
             text-shadow:6px 1px 6px #333;
@@ -51,7 +51,7 @@
             -webkit-border-radius: 4px;
             -moz-border-radius: 4px;
             -o-border-radius: 4px;
-            color:yellow;
+            color: #161971;
             text-decoration:none;
             padding:30px 30px;
             font-size: 20px;
@@ -59,38 +59,40 @@
             font-family: 'Fjalla One', sans-serif;
             text-align: center;
         }
-        .ag-3d_button.orange {
-            box-shadow: rgba(155, 142, 50, 0.98) 0 3px 0px, rgba(0, 0, 0, 0.3) 0 3px 3px;
-        }
-        .ag-3d_button {
-            vertical-align: top;
-            border-radius: 4px;
-            border: none;
-            padding: 10px 25px 12px;
-        }
-        .orange {
-            background: #fdde02;
-            background: -moz-linear-gradient(top,  #fdde02 0%, #dec829 99%);
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdde02), color-stop(99%,#dec829));
-            background: -webkit-linear-gradient(top,  #fdde02 0%,#dec829 99%);
-            background: -o-linear-gradient(top,  #fdde02 0%,#dec829 99%);
-            background: -ms-linear-gradient(top,  #fdde02 0%,#dec829 99%);
-            background: linear-gradient(to bottom,  #fdde02 0%,#dec829 99%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdde02', endColorstr='#dec829',GradientType=0 );
-            color:#fff;
-            text-shadow:1px 1px 3px rgba(155, 142, 50, 0.98);
-            border: 1px solid rgba(155, 142, 50, 0.98);
+
+        a{
+            position: relative;
+            display: inline-block;
+            font-size: 90%;
+            font-weight: 700;
+            color: rgb(209,209,217);
             text-decoration: none;
+            text-shadow: 0 -1px 2px rgba(0,0,0,.2);
+            padding: .5em 1em;
+            outline: none;
+            border-radius: 3px;
+            background: linear-gradient(rgb(60, 96, 129), rgb(50, 76, 117)) rgb(60, 96, 129);
+            box-shadow:
+            0 1px rgba(255,255,255,.2) inset,
+            0 3px 5px rgba(0,1,6,.5),
+            0 0 1px 1px rgba(0,1,6,.2);
+            transition: .2s ease-in-out;
+
         }
-        .orange:hover {
-            background: #dec829;
-            background: -moz-linear-gradient(top,  #dec829 1%, #fdde02 100%);
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#dec829), color-stop(100%,#fdde02));
-            background: -webkit-linear-gradient(top,  #dec829 1%,#fdde02 100%);
-            background: -o-linear-gradient(top,  #dec829 1%,#fdde02 100%);
-            background: -ms-linear-gradient(top,  #dec829 1%,#fdde02 100%);
-            background: linear-gradient(to bottom,  #dec829 1%,#fdde02 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dec829', endColorstr='#fdde02',GradientType=0 );
+
+        a:active{
+            top: 1px;
+            background: linear-gradient(rgb(37, 72, 121), rgb(22, 25, 113)) rgb(37, 72, 121);
+            box-shadow:
+            0 0 1px rgba(0,0,0,.5) inset,
+            0 2px 3px rgba(0,0,0,.5) inset,
+            0 1px 1px rgba(255,255,255,.1);
+        }
+
+        a:hover:not(:active){
+            top: 1px;
+            background: linear-gradient(rgb(37, 72, 121), rgb(22, 25, 113)) rgb(37, 72, 121);
+
         }
 
     </style>

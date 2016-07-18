@@ -23,6 +23,29 @@ public class DAOAccountHistory {
     }
 
 
+    public boolean writeHistory(AccountHistory history, OperationType type,
+                                Connection connection) {
+
+        try {
+
+            PreparedStatement psWriteHistory = connection.prepareStatement
+                    (resourceBundle.getString("WRITE_HISTORY"));
+
+            psWriteHistory.setInt(1, history.getAccountId());
+            psWriteHistory.setString(2, type.name());
+            psWriteHistory.setDouble(3, history.getSum());
+            psWriteHistory.setString(4, history.getPartnerName());
+            psWriteHistory.setDate(5, history.getOperationDate());
+            psWriteHistory.execute();
+            return true;
+        } catch (SQLException e) {
+            logger.error("write history error ", e);
+            return false;
+        }
+
+
+    }
+
     public List<AccountHistory> getHistory(Account account) {
 
         List<AccountHistory> histories = new ArrayList<>();
@@ -44,8 +67,8 @@ public class DAOAccountHistory {
                 OperationType operationType = OperationType.valueOf
                         (resultSet.getString("operation_type").toUpperCase());
 
-                histories.add(new AccountHistory(id, accountId, sum, partnerName,
-                        operationDate, operationType));
+                histories.add(new AccountHistory(id, accountId, sum,
+                        partnerName, operationDate, operationType));
 
             }
             return histories;

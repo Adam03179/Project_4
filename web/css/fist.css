@@ -98,10 +98,7 @@ input[type=password]{
 .loginSubmit:hover:not(:active){
     top: 1px;
     background: linear-gradient(rgb(37, 72, 121), rgb(22, 25, 113)) rgb(37, 72, 121);
-    box-shadow:
-    0 0 1px rgba(0,0,0,.5) inset,
-    0 2px 3px rgba(0,0,0,.5) inset,
-    0 1px 1px rgba(255,255,255,.1);
+
 }
 
 

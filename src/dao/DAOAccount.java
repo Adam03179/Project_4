@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 
 public class DAOAccount {
     private DataSource dataSource;
+    private DAOAccountHistory historyDAO;
     private static final Logger logger = Logger.getLogger(DAOAccount.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
@@ -49,15 +50,9 @@ public class DAOAccount {
         connection.setAutoCommit(false);
 
         try {
-            PreparedStatement psWriteHistory = connection.prepareStatement
-                    (resourceBundle.getString("WRITE_HISTORY"));
-            psWriteHistory.setInt(1, history.getAccountId());
-            psWriteHistory.setString(2, OperationType.BLOCK.name());
-            psWriteHistory.setDouble(3, history.getSum());
-            psWriteHistory.setString(4, history.getPartnerName());
-            psWriteHistory.setDate(5, history.getOperationDate());
-            psWriteHistory.execute();
 
+            historyDAO = new DAOAccountHistory(dataSource);
+            historyDAO.writeHistory(history, OperationType.BLOCK, connection);
 
             PreparedStatement psBlockAccount = connection.prepareStatement
                     (resourceBundle.getString("BLOCK_ACCOUNT"));
@@ -81,15 +76,9 @@ public class DAOAccount {
         connection.setAutoCommit(false);
 
         try {
-            PreparedStatement psWriteHistory = connection.prepareStatement
-                    (resourceBundle.getString("WRITE_HISTORY"));
-            psWriteHistory.setInt(1, history.getAccountId());
-            psWriteHistory.setString(2, OperationType.UNBLOCK.name());
-            psWriteHistory.setDouble(3, history.getSum());
-            psWriteHistory.setString(4, history.getPartnerName());
-            psWriteHistory.setDate(5, history.getOperationDate());
-            psWriteHistory.execute();
 
+            historyDAO = new DAOAccountHistory(dataSource);
+            historyDAO.writeHistory(history, OperationType.UNBLOCK, connection);
 
             PreparedStatement preparedStatement = connection.prepareStatement
                     (resourceBundle.getString("UNBLOCK_ACCOUNT"));
@@ -129,8 +118,8 @@ public class DAOAccount {
                 int clientId = resultSet.getInt("clients_id");
                 boolean isBlocked = resultSet.getBoolean("is_blocked");
 
-                accounts.add(new Account(id, clientId, number, interest, openDate,
-                        balance, currency, isBlocked));
+                accounts.add(new Account(id, clientId, number,
+                        interest, openDate, balance, currency, isBlocked));
 
             }
             return accounts;
@@ -142,25 +131,20 @@ public class DAOAccount {
 
     }
 
-    public boolean addFunds(AccountHistory history, double sum) throws SQLException {
+    public boolean addFunds(AccountHistory history)
+            throws SQLException {
         Connection connection = dataSource.getConnection();
         connection.setAutoCommit(false);
 
         try {
 
-            PreparedStatement psWriteHistory = connection.prepareStatement
-                    (resourceBundle.getString("WRITE_HISTORY"));
-            psWriteHistory.setInt(1, history.getAccountId());
-            psWriteHistory.setString(2, OperationType.DEPOSIT.name());
-            psWriteHistory.setDouble(3, sum);
-            psWriteHistory.setString(4, history.getPartnerName());
-            psWriteHistory.setDate(5, history.getOperationDate());
-            psWriteHistory.execute();
-
+            historyDAO = new DAOAccountHistory(dataSource);
+            historyDAO.writeHistory
+                    (history, OperationType.DEPOSIT, connection);
 
             PreparedStatement psAddFunds = connection.prepareStatement
                     (resourceBundle.getString("ADD_FUNDS"));
-            psAddFunds.setDouble(1, sum);
+            psAddFunds.setDouble(1, history.getSum());
             psAddFunds.setInt(2, history.getAccountId());
             psAddFunds.executeUpdate();
 
@@ -178,28 +162,24 @@ public class DAOAccount {
 
     }
 
-    public boolean withdrawFunds(AccountHistory history, double sum) throws SQLException {
+    public boolean withdrawFunds(AccountHistory history)
+            throws SQLException {
 
         Connection connection = dataSource.getConnection();
         connection.setAutoCommit(false);
 
         try {
 
-            PreparedStatement psWriteHistory = connection.prepareStatement
-                    (resourceBundle.getString("WRITE_HISTORY"));
-            psWriteHistory.setInt(1, history.getAccountId());
-            psWriteHistory.setString(2, OperationType.WITHDRAW.name());
-            psWriteHistory.setDouble(3, sum);
-            psWriteHistory.setString(4, history.getPartnerName());
-            psWriteHistory.setDate(5, history.getOperationDate());
-            psWriteHistory.execute();
 
+            historyDAO = new DAOAccountHistory(dataSource);
+            historyDAO.writeHistory(history,
+                    OperationType.WITHDRAW, connection);
 
-            PreparedStatement psAddFunds = connection.prepareStatement
+            PreparedStatement psWithdrawFunds = connection.prepareStatement
                     (resourceBundle.getString("WITHDRAW_FUNDS"));
-            psAddFunds.setDouble(1, sum);
-            psAddFunds.setInt(2, history.getAccountId());
-            psAddFunds.executeUpdate();
+            psWithdrawFunds.setDouble(1, history.getSum());
+            psWithdrawFunds.setInt(2, history.getAccountId());
+            psWithdrawFunds.executeUpdate();
 
             connection.commit();
             return true;
@@ -215,28 +195,45 @@ public class DAOAccount {
 
     }
 
-    public boolean transferFunds(AccountHistory history, double sum,
-                                 AccountHistory partnersHistory) {
+    public boolean transferFunds(AccountHistory history,
+                                 AccountHistory partnersHistory) throws SQLException {
 
-        try (Connection connection = dataSource.getConnection()) {
+        Connection connection = dataSource.getConnection();
+        connection.setAutoCommit(false);
 
-            PreparedStatement psWriteHistory = connection.prepareStatement
-                    (resourceBundle.getString("WRITE_HISTORY"));
-            psWriteHistory.setInt(1, history.getAccountId());
-            psWriteHistory.setString(2, OperationType.TRANSFER.name());
-            psWriteHistory.setDouble(3, sum);
-            psWriteHistory.setString(4, history.getPartnerName());
-            psWriteHistory.setDate(5, history.getOperationDate());
+        try {
 
-            withdrawFunds(history, sum);
-            addFunds(partnersHistory, sum);
+            historyDAO = new DAOAccountHistory(dataSource);
+            historyDAO.writeHistory(history,
+                    OperationType.TRANSFER, connection);
 
 
+            PreparedStatement psWithdrawFunds = connection.prepareStatement
+                    (resourceBundle.getString("WITHDRAW_FUNDS"));
+            psWithdrawFunds.setDouble(1, history.getSum());
+            psWithdrawFunds.setInt(2, history.getAccountId());
+            psWithdrawFunds.executeUpdate();
+
+
+            historyDAO.writeHistory(partnersHistory,
+                    OperationType.DEPOSIT, connection);
+
+            PreparedStatement psAddFunds = connection.prepareStatement
+                    (resourceBundle.getString("ADD_FUNDS"));
+            psAddFunds.setDouble(1, history.getSum());
+            psAddFunds.setInt(2, history.getAccountId());
+            psAddFunds.executeUpdate();
+
+            connection.commit();
             return true;
 
         } catch (SQLException e) {
             logger.error("transfer funds error ", e);
+            connection.rollback();
             return false;
+        } finally {
+
+            connection.close();
         }
 
     }
