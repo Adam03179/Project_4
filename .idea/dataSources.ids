@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="MySQL - Payments@localhost" uuid="eda02e0c-0162-44cb-8b59-d0cd4dc67854">
-    <database-info product="MySQL" version="5.6.31-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+    <database-info product="MySQL" version="5.6.31-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.39 ( Revision: 3289a357af6d09ecc1a10fd3c26e95183e5790ad )">
       <extra-name-characters>#@</extra-name-characters>
       <identifier-quote-string>`</identifier-quote-string>
     </database-info>
@@ -64,18 +64,6 @@
       <primary-key name="PRIMARY" columns="history_id"/>
       <foreign-key name="history_ibfk_1" columns="account_id" ref-table="accounts" ref-schema="" ref-catalog="payments" ref-columns="account_id" update-rule="3" delete-rule="3" deferrability="2"/>
     </table>
-    <table name="passports" schema="" catalog="payments" type="TABLE">
-      <column name="passport_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="number" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="series" sqlType="VARCHAR" precision="5" scale="0" nullable="false" jdbcType="12"/>
-      <column name="issuing_authority" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
-      <column name="date_of_issue" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
-      <column name="users_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <primary-key name="PRIMARY" columns="passport_id"/>
-      <foreign-key name="passports_ibfk_1" columns="users_id" ref-table="users" ref-schema="" ref-catalog="payments" ref-columns="users_id" update-rule="3" delete-rule="3" deferrability="2"/>
-      <index name="unique_passport_id" unique="true" columns="passport_id"/>
-      <index name="clients_id" unique="false" columns="users_id"/>
-    </table>
     <table name="users" schema="" catalog="payments" type="TABLE">
       <column name="users_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MA=="/>
       <column name="name" sqlType="VARCHAR" precision="24" scale="0" nullable="false" jdbcType="12"/>
@@ -84,10 +72,12 @@
       <column name="password" sqlType="VARCHAR" precision="24" scale="0" nullable="false" jdbcType="12"/>
       <column name="log_in" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
       <column name="is_admin" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <column name="passport_number" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="passport_series" sqlType="VARCHAR" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="date_of_passport_issue" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
       <primary-key name="PRIMARY" columns="users_id"/>
       <exported-key name="accounts_ibfk_1" table="accounts" schema="" catalog="payments" columns="users_id"/>
       <exported-key name="contacts_ibfk_1" table="contacts" schema="" catalog="payments" columns="users_id"/>
-      <exported-key name="passports_ibfk_1" table="passports" schema="" catalog="payments" columns="users_id"/>
       <index name="unique_individualtaxnumber" unique="true" columns="individual_tax_number"/>
       <index name="unique_user_id" unique="true" columns="users_id"/>
     </table>

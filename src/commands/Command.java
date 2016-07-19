@@ -1,11 +1,10 @@
 package commands;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
+import requestContent.SessionRequestContent;
+
 
 public interface Command {
 
-    String execute(HttpServletRequest request, HttpServletResponse response) throws SQLException;
+    String execute(SessionRequestContent request);
 }

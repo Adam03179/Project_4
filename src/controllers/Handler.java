@@ -1,8 +1,8 @@
 package controllers;
 
-import commands.Command;
 import commands.CommandFactory;
-import org.apache.log4j.Logger;
+import commands.Command;
+import requestContent.SessionRequestContent;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,28 +10,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class Handler extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(Handler.class);
-
-    private void processRequest(HttpServletRequest request,
-                                HttpServletResponse response)
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Command handler = CommandFactory.getInstance().getCommand(request);
+        Command handler = CommandFactory.getInstance().defineCommand(request);
         String path = null;
-        try {
-            path = handler.execute(request,response);
-        } catch (SQLException e) {
-           logger.error("process request error", e);
-        }
 
+        SessionRequestContent requestContent = new SessionRequestContent(request);
+        requestContent.extractValues();
+        requestContent.getSessionsAttributes();
+
+
+            path = handler.execute(requestContent);
+
+        requestContent.insertAttributes();
+        requestContent.insertSessionAttributes();
         RequestDispatcher rd = request.getRequestDispatcher(path);
-        rd.forward(request,response);
+        rd.forward(request, response);
 
     }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

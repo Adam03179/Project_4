@@ -2,8 +2,8 @@ package dao;
 
 import dbmodels.Account;
 import dbmodels.AccountHistory;
-import dbmodels.User;
 import dbmodels.OperationType;
+import dbmodels.User;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
@@ -169,8 +169,6 @@ public class DAOAccount {
         connection.setAutoCommit(false);
 
         try {
-
-
             historyDAO = new DAOAccountHistory(dataSource);
             historyDAO.writeHistory(history,
                     OperationType.WITHDRAW, connection);
@@ -202,7 +200,6 @@ public class DAOAccount {
         connection.setAutoCommit(false);
 
         try {
-
             historyDAO = new DAOAccountHistory(dataSource);
             historyDAO.writeHistory(history,
                     OperationType.TRANSFER, connection);
@@ -218,10 +215,11 @@ public class DAOAccount {
             historyDAO.writeHistory(partnersHistory,
                     OperationType.DEPOSIT, connection);
 
+
             PreparedStatement psAddFunds = connection.prepareStatement
                     (resourceBundle.getString("ADD_FUNDS"));
-            psAddFunds.setDouble(1, history.getSum());
-            psAddFunds.setInt(2, history.getAccountId());
+            psAddFunds.setDouble(1, partnersHistory.getSum());
+            psAddFunds.setInt(2, partnersHistory.getAccountId());
             psAddFunds.executeUpdate();
 
             connection.commit();

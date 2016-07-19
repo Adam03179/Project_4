@@ -1,21 +1,20 @@
 package commands;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
+import requestContent.SessionRequestContent;
+import resource.ConfigurationManager;
 
 public class ChangeLanguageCommand implements Command {
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws SQLException {
-        HttpSession session = request.getSession(true);
-        String language = request.getParameter("language");
-        session.setAttribute("setLocale", language);
-        String path = (String) session.getAttribute("path");
+    public String execute(SessionRequestContent request) {
+
+        String language = request.getValueByName("language");
+        request.addAttrToSession("setLocale", language);
+        String path = (String) request.getSessionAttrByName("path");
         if (path == null) {
-            return "/jsp/index.jsp";
+            return ConfigurationManager.getProperty("path.page.index");
         } else {
-            return (String) session.getAttribute("path");
+            return path;
         }
+
     }
 }

@@ -2,46 +2,41 @@ package commands;
 
 import org.apache.log4j.Logger;
 
-import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class CommandFactory {
-
-    private static final Logger logger =
-            Logger.getLogger(CommandFactory.class);
-
-    private static Map<String, Command> commandMap = new HashMap<>();
+    private static final Logger logger = Logger.getLogger(CommandFactory.class);
 
     private static CommandFactory instance = null;
 
-
-    private CommandFactory() throws NamingException {
+    private CommandFactory() {
     }
 
     public static synchronized CommandFactory getInstance() {
+
         if (instance == null) {
-            try {
-                instance = new CommandFactory();
-            } catch (NamingException e) {
-                logger.error("get instance error ", e);
-            }
+            instance = new CommandFactory();
         }
         return instance;
     }
 
-    static {
+    public Command defineCommand(HttpServletRequest request) {
 
-        commandMap.put("login", new LoginCommand());
-        commandMap.put("changeLanguage", new ChangeLanguageCommand());
+        Command current = new EmptyCommand();
+        String action = request.getParameter("Confirm");
 
+        if (action == null || action.isEmpty()) {
+            return current;
+        }
+
+        try {
+            CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
+            current = currentEnum.getCurrentCommand();
+        } catch (IllegalArgumentException e) {
+            logger.error("Wrong action error", e);
+        }
+        return current;
     }
-
-    public Command getCommand(HttpServletRequest request) {
-        String result = request.getParameter("Confirm");
-        return commandMap.get(result);
-    }
-
 
 }

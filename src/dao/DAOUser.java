@@ -4,10 +4,7 @@ import dbmodels.User;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public class DAOUser {
@@ -34,6 +31,9 @@ public class DAOUser {
             psAddClient.setString(3, user.getIndividualTaxNumber());
             psAddClient.setString(4, user.getLogIn());
             psAddClient.setString(5, user.getPassword());
+            psAddClient.setInt(6,user.getNumberOfPassport());
+            psAddClient.setString(7,user.getSeriesOfPassport());
+            psAddClient.setDate(8, user.getDateOfPassportIssue());
 
             return true;
 
@@ -54,7 +54,7 @@ public class DAOUser {
             return true;
 
         } catch (SQLException e) {
-       //     logger.error("change password error", e);
+            logger.error("change password error", e);
             return false;
         }
 
@@ -75,11 +75,16 @@ public class DAOUser {
             String surname = result.getString("surname");
             String individualTaxNumber = result.getString("individual_tax_number");
             boolean isAdmin = result.getBoolean("is_admin");
+            int numberOfPassport = result.getInt("passport_number");
+            String seriesOfPassport = result.getString("passport_series");
+            Date dateOfPassportIssue = result.getDate("date_of_passport_issue");
 
-            return new User(id, name, surname, individualTaxNumber, logIn, password,isAdmin);
+            return new User(id,name,surname,individualTaxNumber,logIn,password,
+                    numberOfPassport,seriesOfPassport,dateOfPassportIssue,
+                    isAdmin);
 
         } catch (SQLException e) {
-        //    logger.error("get user error", e);
+            logger.error("get user error", e);
             return null;
         }
 
@@ -99,7 +104,7 @@ public class DAOUser {
             return resultSet.next();
 
         } catch (SQLException e) {
-        //    logger.error("is exist user error", e);
+            logger.error("is exist user error", e);
             return false;
         }
 

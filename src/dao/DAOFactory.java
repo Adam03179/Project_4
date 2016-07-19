@@ -48,9 +48,7 @@ public class DAOFactory {
         return new DAOContacts(dataSource);
     }
 
-    public DAOPassport getDAOPassport() {
-        return new DAOPassport(dataSource);
-    }
+
 
 
 }

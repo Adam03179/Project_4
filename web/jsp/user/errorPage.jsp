@@ -103,14 +103,13 @@
         <p>Project4</p>
     </div>
     <div class="title">
-        <h1>You've Failed</h1>
-        <h2>Error!</h2>
+        <h1><fmt:message key="FAILED"/></h1>
+        <h2><fmt:message key="ERROR"/></h2>
     </div>
 </div>
 <div class="wrap">
     <div class="gray">
-
-        <a href="<c:url value="/jsp/index.jsp"/>" class="ag-3d_button orange">Go Back </a>
+        <a href="<c:url value="/jsp/index.jsp"/>"><fmt:message key="GO_BACK"/></a>
     </div>
 </div>
 
