@@ -1,6 +1,6 @@
 package commands;
 
-import requestContent.SessionRequestContent;
+import controllers.SessionRequestContent;
 import resource.ConfigurationManager;
 
 

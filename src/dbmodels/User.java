@@ -1,6 +1,5 @@
 package dbmodels;
 
-import java.sql.Date;
 
 public class User {
     private int id;
@@ -11,16 +10,28 @@ public class User {
     private String password;
     private int numberOfPassport;
     private String seriesOfPassport;
-    private Date dateOfPassportIssue;
     private boolean isAdmin;
 
     public User() {
     }
 
+    public User(String name, String surname, String individualTaxNumber,
+                String logIn, String password, int numberOfPassport,
+                String seriesOfPassport, boolean isAdmin) {
+        this.name = name;
+        this.surname = surname;
+        this.individualTaxNumber = individualTaxNumber;
+        this.logIn = logIn;
+        this.password = password;
+        this.numberOfPassport = numberOfPassport;
+        this.seriesOfPassport = seriesOfPassport;
+        this.isAdmin = isAdmin;
+    }
+
     public User(int id, String name, String surname,
                 String individualTaxNumber, String logIn, String password,
                 int numberOfPassport, String seriesOfPassport,
-                Date dateOfPassportIssue, boolean isAdmin) {
+                boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -29,7 +40,6 @@ public class User {
         this.password = password;
         this.numberOfPassport = numberOfPassport;
         this.seriesOfPassport = seriesOfPassport;
-        this.dateOfPassportIssue = dateOfPassportIssue;
         this.isAdmin = isAdmin;
     }
 
@@ -95,14 +105,6 @@ public class User {
 
     public void setSeriesOfPassport(String seriesOfPassport) {
         this.seriesOfPassport = seriesOfPassport;
-    }
-
-    public Date getDateOfPassportIssue() {
-        return dateOfPassportIssue;
-    }
-
-    public void setDateOfPassportIssue(Date dateOfPassportIssue) {
-        this.dateOfPassportIssue = dateOfPassportIssue;
     }
 
     public boolean isAdmin() {

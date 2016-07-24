@@ -11,7 +11,7 @@
 <html>
 <head>
     <title></title>
-    <link href="<c:url value="/css/header.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/header.css"/>" rel="stylesheet">
 
 </head>
 <body>
@@ -19,14 +19,14 @@
 <div class="newLanguage"  >
     <form action="${pageContext.request.contextPath}/handler" method="post">
         <input type="hidden" name="language" value="ru_RU"/>
-        <input type="hidden" name="Confirm" value="change_Language"/>
+        <input type="hidden" name="Confirm" value="change_language"/>
         <input type="submit" value= <fmt:message key="RUS"/>>
     </form>
 
 
     <form action="${pageContext.request.contextPath}/handler" method="post">
         <input type="hidden" name="language" value="en_US"/>
-        <input type="hidden" name="Confirm" value="change_Language"/>
+        <input type="hidden" name="Confirm" value="change_language"/>
         <input type="submit"  value=<fmt:message key="ENG"/>>
     </form>
 </div>

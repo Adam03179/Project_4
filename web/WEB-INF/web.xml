@@ -5,7 +5,7 @@
          version="3.1">
 
     <welcome-file-list>
-        <welcome-file>jsp/index.jsp</welcome-file>
+        <welcome-file>resources/jsp/index.jsp</welcome-file>
     </welcome-file-list>
 
     <servlet-mapping>
@@ -42,9 +42,18 @@
 
     <!--Session config begin-->
     <session-config>
-        <session-timeout>1000</session-timeout>
+        <session-timeout>1</session-timeout>
     </session-config>
     <!--Session config end-->
+<!--
+    <error-page>
+        <error-code>500</error-code>
+        <location>/resources/jsp/user/errorPage.jsp</location>
+    </error-page>
 
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/resources/jsp/user/errorPage.jsp</location>
+    </error-page> -->
 </web-app>

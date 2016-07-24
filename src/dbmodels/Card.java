@@ -9,10 +9,10 @@ public class Card {
     private String number;
     private int pinCode;
     private Date expirationDate;
-    private CardStandard cardStandard;
+    private String cardStandard;
 
 
-    public Card(int id, int accountId, String number, int pinCode, Date expirationDate, CardStandard cardStandard) {
+    public Card(int id, int accountId, String number, int pinCode, Date expirationDate, String cardStandard) {
         this.id = id;
         this.accountId = accountId;
         this.number = number;
@@ -21,7 +21,7 @@ public class Card {
         this.cardStandard = cardStandard;
     }
 
-    public Card(int accountId, String number, int pinCode, Date expirationDate, CardStandard cardStandard) {
+    public Card(int accountId, String number, int pinCode, Date expirationDate, String cardStandard) {
         this.accountId = accountId;
         this.number = number;
         this.pinCode = pinCode;
@@ -69,11 +69,11 @@ public class Card {
         this.expirationDate = expirationDate;
     }
 
-    public CardStandard getCardStandard() {
+    public String getCardStandard() {
         return cardStandard;
     }
 
-    public void setCardStandard(CardStandard cardStandard) {
+    public void setCardStandard(String cardStandard) {
         this.cardStandard = cardStandard;
     }
 }

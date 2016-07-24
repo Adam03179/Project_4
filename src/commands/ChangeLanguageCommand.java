@@ -1,6 +1,6 @@
 package commands;
 
-import requestContent.SessionRequestContent;
+import controllers.SessionRequestContent;
 import resource.ConfigurationManager;
 
 public class ChangeLanguageCommand implements Command {
@@ -8,8 +8,8 @@ public class ChangeLanguageCommand implements Command {
     public String execute(SessionRequestContent request) {
 
         String language = request.getValueByName("language");
-        request.addAttrToSession("setLocale", language);
-        String path = (String) request.getSessionAttrByName("path");
+        request.getSession().setAttribute("setLocale", language);
+        String path = (String) request.getSession().getAttribute("path");
         if (path == null) {
             return ConfigurationManager.getProperty("path.page.index");
         } else {

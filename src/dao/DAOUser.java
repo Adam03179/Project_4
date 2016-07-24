@@ -4,13 +4,16 @@ import dbmodels.User;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DAOUser {
 
     private DataSource dataSource;
-    private static final Logger logger = Logger.getLogger(DAOCard.class);
+    private static final Logger logger = Logger.getLogger(DAOUser.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
@@ -20,7 +23,7 @@ public class DAOUser {
     }
 
 
-    public boolean addClient(User user) {
+    public boolean addUser(User user) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psAddClient = connection.prepareStatement
@@ -31,9 +34,10 @@ public class DAOUser {
             psAddClient.setString(3, user.getIndividualTaxNumber());
             psAddClient.setString(4, user.getLogIn());
             psAddClient.setString(5, user.getPassword());
-            psAddClient.setInt(6,user.getNumberOfPassport());
-            psAddClient.setString(7,user.getSeriesOfPassport());
-            psAddClient.setDate(8, user.getDateOfPassportIssue());
+            psAddClient.setInt(6, user.getNumberOfPassport());
+            psAddClient.setString(7, user.getSeriesOfPassport());
+            psAddClient.execute();
+
 
             return true;
 
@@ -51,6 +55,7 @@ public class DAOUser {
                     (resourceBundle.getString("CHANGE_PASSWORD"));
             psChangePassword.setString(1, newPassword);
             psChangePassword.setInt(2, user.getId());
+            psChangePassword.executeUpdate();
             return true;
 
         } catch (SQLException e) {
@@ -60,28 +65,29 @@ public class DAOUser {
 
     }
 
-    public User getClient(String logIn, String password) {
+    public User getUser(String logIn, String password) {
 
         try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement psChangePassword = connection.prepareStatement
+            PreparedStatement psGetUser = connection.prepareStatement
                     (resourceBundle.getString("GET_USER"));
 
-            psChangePassword.setString(1, logIn);
-            psChangePassword.setString(2, password);
-            ResultSet result = psChangePassword.executeQuery();
+            psGetUser.setString(1, logIn);
+            psGetUser.setString(2, password);
+            ResultSet result = psGetUser.executeQuery();
 
-            int id = result.getInt("clients_id");
+            int id = result.getInt("users_id");
             String name = result.getString("name");
             String surname = result.getString("surname");
             String individualTaxNumber = result.getString("individual_tax_number");
             boolean isAdmin = result.getBoolean("is_admin");
             int numberOfPassport = result.getInt("passport_number");
             String seriesOfPassport = result.getString("passport_series");
-            Date dateOfPassportIssue = result.getDate("date_of_passport_issue");
 
-            return new User(id,name,surname,individualTaxNumber,logIn,password,
-                    numberOfPassport,seriesOfPassport,dateOfPassportIssue,
-                    isAdmin);
+            result.next();
+
+            return new User(id, name, surname, individualTaxNumber, logIn, password,
+                    numberOfPassport, seriesOfPassport, isAdmin);
+
 
         } catch (SQLException e) {
             logger.error("get user error", e);
@@ -90,14 +96,13 @@ public class DAOUser {
 
     }
 
-    public boolean isExist(User user){
+    public boolean isExist(String logIn, String password) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psIsExist = connection.prepareStatement
                     (resourceBundle.getString("USER_IS_EXIST"));
 
-            psIsExist.setString(1,user.getLogIn());
-            psIsExist.setString(2,user.getPassword());
-
+            psIsExist.setString(1, logIn);
+            psIsExist.setString(2, password);
 
             ResultSet resultSet = psIsExist.executeQuery();
 
@@ -108,6 +113,46 @@ public class DAOUser {
             return false;
         }
 
+
+    }
+
+    public Integer getId(String logIn) {
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psGetId = connection.prepareStatement
+                    (resourceBundle.getString("GET_USER_ID"));
+
+            psGetId.setString(1, logIn);
+            ResultSet result = psGetId.executeQuery();
+
+            result.next();
+            return result.getInt("users_id");
+
+
+        } catch (SQLException e) {
+            logger.error("get user id error", e);
+            return null;
+        }
+
+    }
+
+    public boolean isAdmin(int id) {
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psIsAdmin = connection.prepareStatement
+                    (resourceBundle.getString("IS_ADMIN"));
+
+            psIsAdmin.setInt(1, id);
+
+            ResultSet resultSet = psIsAdmin.executeQuery();
+            resultSet.next();
+            return (resultSet.getInt("is_admin") == 1);
+
+
+        } catch (SQLException e) {
+            logger.error("is admin user error", e);
+            return false;
+        }
 
 
     }

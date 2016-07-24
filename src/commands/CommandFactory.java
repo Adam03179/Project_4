@@ -34,7 +34,7 @@ public class CommandFactory {
             CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
             current = currentEnum.getCurrentCommand();
         } catch (IllegalArgumentException e) {
-            logger.error("Wrong action error", e);
+            logger.error("Define command error", e);
         }
         return current;
     }

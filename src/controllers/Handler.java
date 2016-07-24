@@ -2,7 +2,6 @@ package controllers;
 
 import commands.CommandFactory;
 import commands.Command;
-import requestContent.SessionRequestContent;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,18 +15,17 @@ public class Handler extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         Command handler = CommandFactory.getInstance().defineCommand(request);
         String path = null;
 
         SessionRequestContent requestContent = new SessionRequestContent(request);
         requestContent.extractValues();
-        requestContent.getSessionsAttributes();
-
 
             path = handler.execute(requestContent);
 
-        requestContent.insertAttributes();
-        requestContent.insertSessionAttributes();
+        requestContent.insertAttributesToRequest();
         RequestDispatcher rd = request.getRequestDispatcher(path);
         rd.forward(request, response);
 

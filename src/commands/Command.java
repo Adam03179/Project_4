@@ -1,8 +1,7 @@
 package commands;
 
 
-import requestContent.SessionRequestContent;
-
+import controllers.SessionRequestContent;
 
 public interface Command {
 

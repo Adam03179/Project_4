@@ -26,8 +26,8 @@
     </table>
     <table name="cards" schema="" catalog="payments" type="TABLE">
       <column name="number" sqlType="CHAR" precision="16" scale="0" nullable="false" jdbcType="1"/>
-      <column name="standard" sqlType="CHAR" precision="7" scale="0" nullable="true" jdbcType="1"/>
-      <column name="pin_code" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="standard" sqlType="CHAR" precision="12" scale="0" nullable="true" jdbcType="1"/>
+      <column name="pin_code" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="expiration_date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
       <column name="account_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="cards_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -37,22 +37,20 @@
       <index name="unique_number" unique="true" columns="number"/>
     </table>
     <table name="contacts" schema="" catalog="payments" type="TABLE">
-      <column name="contacts_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MA=="/>
-      <column name="country" sqlType="VARCHAR" precision="36" scale="0" nullable="false" jdbcType="12"/>
+      <column name="contacts_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="city" sqlType="VARCHAR" precision="36" scale="0" nullable="false" jdbcType="12"/>
       <column name="post_code" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="street" sqlType="VARCHAR" precision="36" scale="0" nullable="false" jdbcType="12"/>
       <column name="house_number" sqlType="VARCHAR" precision="7" scale="0" nullable="false" jdbcType="12"/>
-      <column name="apartment_number" sqlType="VARCHAR" precision="5" scale="0" nullable="true" jdbcType="12"/>
-      <column name="users_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="apartment_number" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="telephone_number" sqlType="VARCHAR" precision="15" scale="0" nullable="true" jdbcType="12"/>
       <column name="email" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
       <column name="region" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
+      <column name="users_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="contacts_id"/>
       <foreign-key name="contacts_ibfk_1" columns="users_id" ref-table="users" ref-schema="" ref-catalog="payments" ref-columns="users_id" update-rule="3" delete-rule="3" deferrability="2"/>
       <index name="unique_address_id" unique="true" columns="contacts_id"/>
       <index name="unique_email" unique="true" columns="email"/>
-      <index name="clients_id" unique="false" columns="users_id"/>
     </table>
     <table name="history" schema="" catalog="payments" type="TABLE">
       <column name="history_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -65,21 +63,20 @@
       <foreign-key name="history_ibfk_1" columns="account_id" ref-table="accounts" ref-schema="" ref-catalog="payments" ref-columns="account_id" update-rule="3" delete-rule="3" deferrability="2"/>
     </table>
     <table name="users" schema="" catalog="payments" type="TABLE">
-      <column name="users_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MA=="/>
+      <column name="users_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="name" sqlType="VARCHAR" precision="24" scale="0" nullable="false" jdbcType="12"/>
       <column name="surname" sqlType="VARCHAR" precision="24" scale="0" nullable="false" jdbcType="12"/>
-      <column name="individual_tax_number" sqlType="CHAR" precision="10" scale="0" nullable="true" jdbcType="1"/>
+      <column name="individual_tax_number" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="password" sqlType="VARCHAR" precision="24" scale="0" nullable="false" jdbcType="12"/>
       <column name="log_in" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
-      <column name="is_admin" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <column name="is_admin" sqlType="TINYINT" precision="3" scale="0" nullable="true" jdbcType="-6" def="MA=="/>
       <column name="passport_number" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="passport_series" sqlType="VARCHAR" precision="5" scale="0" nullable="false" jdbcType="12"/>
-      <column name="date_of_passport_issue" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
       <primary-key name="PRIMARY" columns="users_id"/>
       <exported-key name="accounts_ibfk_1" table="accounts" schema="" catalog="payments" columns="users_id"/>
       <exported-key name="contacts_ibfk_1" table="contacts" schema="" catalog="payments" columns="users_id"/>
       <index name="unique_individualtaxnumber" unique="true" columns="individual_tax_number"/>
-      <index name="unique_user_id" unique="true" columns="users_id"/>
+      <index name="unique_users_id" unique="true" columns="users_id"/>
     </table>
   </data-source>
 </component>

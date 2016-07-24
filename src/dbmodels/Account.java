@@ -4,35 +4,47 @@ import java.sql.Date;
 
 public class Account {
     private int id;
-    private int clientId;
+    private int userId;
     private String number;
     private double interest;
     private Date openDate;
     private double balance;
     private String currency;
-    private boolean isBlocked;
+    private boolean blocked;
 
 
-    public Account(int id, int clientId, String number, double interest,
-                   Date openDate, double balance, String currency, boolean isBlocked) {
+    public Account(int id, int userId, String number, double interest,
+                   Date openDate, double balance, String currency) {
         this.id = id;
-        this.clientId = clientId;
+        this.userId = userId;
         this.number = number;
         this.interest = interest;
         this.openDate = openDate;
         this.balance = balance;
         this.currency = currency;
-        this.isBlocked = isBlocked;
     }
 
-    public Account(int clientId, String number, double interest, Date openDate, double balance, String currency, boolean isBlocked) {
-        this.clientId = clientId;
+    public Account(int userId, String number, double interest, Date openDate,
+                   double balance, String currency) {
+        this.userId = userId;
         this.number = number;
         this.interest = interest;
         this.openDate = openDate;
         this.balance = balance;
         this.currency = currency;
-        this.isBlocked = isBlocked;
+    }
+
+    public Account(int id, int userId, String number, double interest,
+                   Date openDate, double balance, String currency,
+                   boolean blocked) {
+        this.id = id;
+        this.userId = userId;
+        this.number = number;
+        this.interest = interest;
+        this.openDate = openDate;
+        this.balance = balance;
+        this.currency = currency;
+        this.blocked = blocked;
     }
 
     public int getId() {
@@ -43,12 +55,12 @@ public class Account {
         this.id = id;
     }
 
-    public int getClientId() {
-        return clientId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getNumber() {
@@ -92,10 +104,10 @@ public class Account {
     }
 
     public boolean isBlocked() {
-        return isBlocked;
+        return blocked;
     }
 
     public void setBlocked(boolean isBlocked) {
-        this.isBlocked = isBlocked;
+        this.blocked = isBlocked;
     }
 }

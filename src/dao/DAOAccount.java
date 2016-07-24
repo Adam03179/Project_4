@@ -29,13 +29,14 @@ public class DAOAccount {
             PreparedStatement psCreateAccount = connection.prepareStatement
                     (resourceBundle.getString("CREATE_ACCOUNT"));
 
-            psCreateAccount.setInt(1, account.getClientId());
+            psCreateAccount.setInt(1, account.getUserId());
             psCreateAccount.setString(2, account.getNumber());
             psCreateAccount.setDouble(3, account.getInterest());
             psCreateAccount.setDate(4, account.getOpenDate());
             psCreateAccount.setDouble(5, account.getBalance());
             psCreateAccount.setString(6, account.getCurrency());
-            psCreateAccount.setBoolean(7, account.isBlocked());
+            psCreateAccount.execute();
+
             return true;
         } catch (SQLException e) {
             logger.error("create account error ", e);
@@ -98,13 +99,13 @@ public class DAOAccount {
     }
 
 
-    public List<Account> getAllAccounts(User user) {
+    public List<Account> getAllAccounts(int userId) {
         List<Account> accounts = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psGetAllAccounts = connection.prepareStatement
                     (resourceBundle.getString("GET_ALL_ACCOUNTS"));
-            psGetAllAccounts.setInt(1, user.getId());
+            psGetAllAccounts.setInt(1, userId);
 
             ResultSet resultSet = psGetAllAccounts.executeQuery();
 
@@ -115,7 +116,7 @@ public class DAOAccount {
                 Date openDate = resultSet.getDate("open_date");
                 double balance = resultSet.getDouble("balance");
                 String currency = resultSet.getString("currency");
-                int clientId = resultSet.getInt("clients_id");
+                int clientId = resultSet.getInt("users_id");
                 boolean isBlocked = resultSet.getBoolean("is_blocked");
 
                 accounts.add(new Account(id, clientId, number,
@@ -232,6 +233,47 @@ public class DAOAccount {
         } finally {
 
             connection.close();
+        }
+
+    }
+
+    public boolean isExist(String accountNumber){
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psIsAccountExist = connection.prepareStatement
+                    (resourceBundle.getString("IS_ACCOUNT_EXIST"));
+
+            psIsAccountExist.setString(1, accountNumber);
+
+            ResultSet resultSet = psIsAccountExist.executeQuery();
+
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            logger.error("is account exist error ", e);
+            return false;
+        }
+
+
+
+
+    }
+    public Integer getId(String numberOfAccount) {
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psGetId = connection.prepareStatement
+                    (resourceBundle.getString("GET_ACCOUNT_ID"));
+
+            psGetId.setString(1, numberOfAccount);
+            ResultSet result = psGetId.executeQuery();
+
+            result.next();
+            return result.getInt("account_id");
+
+
+        } catch (SQLException e) {
+            logger.error("get account id error", e);
+            return null;
         }
 
     }

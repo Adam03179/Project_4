@@ -2,9 +2,8 @@ package dbmodels;
 
 public class Contacts {
     private int id;
-    private int clientId;
+    private int userId;
     private int postCode;
-    private String country;
     private String region;
     private String city;
     private String street;
@@ -13,14 +12,13 @@ public class Contacts {
     private String telephoneNum;
     private String email;
 
-    public Contacts(int id, int clientId, int postCode, String country,
+    public Contacts(int id, int userId, int postCode,
                     String region, String city, String street,
                     String numOfHouse, String numOfApartment,
                     String telephoneNum, String email) {
         this.id = id;
-        this.clientId = clientId;
+        this.userId = userId;
         this.postCode = postCode;
-        this.country = country;
         this.region = region;
         this.city = city;
         this.street = street;
@@ -30,13 +28,12 @@ public class Contacts {
         this.email = email;
     }
 
-    public Contacts(int clientId, int postCode, String country,
+    public Contacts(int userId, int postCode,
                     String region, String city, String street,
                     String numOfHouse, String numOfApartment,
                     String telephoneNum, String email) {
-        this.clientId = clientId;
+        this.userId = userId;
         this.postCode = postCode;
-        this.country = country;
         this.region = region;
         this.city = city;
         this.street = street;
@@ -54,12 +51,12 @@ public class Contacts {
         this.id = id;
     }
 
-    public int getClientId() {
-        return clientId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getPostCode() {
@@ -68,14 +65,6 @@ public class Contacts {
 
     public void setPostCode(int postCode) {
         this.postCode = postCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public String getRegion() {

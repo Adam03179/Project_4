@@ -24,7 +24,6 @@ public class DAOFactory {
                 logger.error("Instance error " + e);
             }
         }
-
         return instance;
     }
 
