@@ -5,31 +5,17 @@
          version="3.1">
 
     <welcome-file-list>
-        <welcome-file>resources/jsp/index.jsp</welcome-file>
+        <welcome-file>jsp/index.jsp</welcome-file>
     </welcome-file-list>
-
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/WEB-INF/img/*</url-pattern>
-        <url-pattern>*.ico</url-pattern>
-        <url-pattern>*.jpg</url-pattern>
-        <url-pattern>*.png</url-pattern>
-        <url-pattern>*.css</url-pattern>
-        <url-pattern>*.ttf</url-pattern>
-        <url-pattern>*.svg</url-pattern>
-        <url-pattern>*.eot</url-pattern>
-        <url-pattern>*.js</url-pattern>
-    </servlet-mapping>
-
 
     <servlet>
         <servlet-name>Handler</servlet-name>
-        <servlet-class>controllers.Handler</servlet-class>
+        <servlet-class>main.java.controllers.Handler</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>Handler</servlet-name>
-        <url-pattern>/handler</url-pattern>
+        <url-pattern>/payments</url-pattern>
     </servlet-mapping>
 
     <!--DB Connection begin-->
@@ -42,18 +28,78 @@
 
     <!--Session config begin-->
     <session-config>
-        <session-timeout>1</session-timeout>
+        <session-timeout>10000</session-timeout>
     </session-config>
     <!--Session config end-->
-<!--
-    <error-page>
-        <error-code>500</error-code>
-        <location>/resources/jsp/user/errorPage.jsp</location>
-    </error-page>
+
+    <!--Filter config begin-->
+
+    <filter>
+        <filter-name>CharsetFilter</filter-name>
+        <filter-class>main.java.filter.CharsetFilter</filter-class>
+        <init-param>
+            <param-name>requestEncoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharsetFilter</filter-name>
+        <url-pattern>/payments</url-pattern>
+    </filter-mapping>
 
 
-    <error-page>
-        <error-code>404</error-code>
-        <location>/resources/jsp/user/errorPage.jsp</location>
-    </error-page> -->
+    <filter>
+        <filter-name>rightsFilter</filter-name>
+        <filter-class>main.java.filter.RightsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>rightsFilter</filter-name>
+        <url-pattern>/payments</url-pattern>
+    </filter-mapping>
+
+        <filter>
+            <filter-name>commandFilter</filter-name>
+            <filter-class>main.java.filter.CommandFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>commandFilter</filter-name>
+            <url-pattern>/payments</url-pattern>
+        </filter-mapping>
+
+
+        <filter>
+            <filter-name>securityFilter</filter-name>
+            <filter-class>main.java.filter.SecurityFilter</filter-class>
+            <init-param>
+                <param-name>INDEX_PATH</param-name>
+                <param-value>/payments</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>securityFilter</filter-name>
+            <url-pattern>/jsp/*</url-pattern>
+        </filter-mapping>
+
+        <!--Filter config end-->
+    <!--Tag config begin-->
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>numberFormatterTag</taglib-uri>
+            <taglib-location>/WEB-INF/tld/numberFormatter.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+    <!--Tag config end-->
+
+    <!--
+        <error-page>
+            <error-code>500</error-code>
+            <location>/resources/jsp/user/errorPage.jsp</location>
+        </error-page>
+
+
+        <error-page>
+            <error-code>404</error-code>
+            <location>/resources/jsp/user/errorPage.jsp</location>
+        </error-page> -->
 </web-app>
