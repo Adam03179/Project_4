@@ -57,30 +57,30 @@
         <url-pattern>/payments</url-pattern>
     </filter-mapping>
 
-        <filter>
-            <filter-name>commandFilter</filter-name>
-            <filter-class>main.java.filter.CommandFilter</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>commandFilter</filter-name>
-            <url-pattern>/payments</url-pattern>
-        </filter-mapping>
+    <filter>
+        <filter-name>commandFilter</filter-name>
+        <filter-class>main.java.filter.CommandFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>commandFilter</filter-name>
+        <url-pattern>/payments</url-pattern>
+    </filter-mapping>
 
 
-        <filter>
-            <filter-name>securityFilter</filter-name>
-            <filter-class>main.java.filter.SecurityFilter</filter-class>
-            <init-param>
-                <param-name>INDEX_PATH</param-name>
-                <param-value>/payments</param-value>
-            </init-param>
-        </filter>
-        <filter-mapping>
-            <filter-name>securityFilter</filter-name>
-            <url-pattern>/jsp/*</url-pattern>
-        </filter-mapping>
+    <filter>
+        <filter-name>securityFilter</filter-name>
+        <filter-class>main.java.filter.SecurityFilter</filter-class>
+        <init-param>
+            <param-name>INDEX_PATH</param-name>
+            <param-value>/payments</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>/jsp/*</url-pattern>
+    </filter-mapping>
 
-        <!--Filter config end-->
+    <!--Filter config end-->
     <!--Tag config begin-->
 
     <jsp-config>
@@ -91,15 +91,15 @@
     </jsp-config>
     <!--Tag config end-->
 
-    <!--
-        <error-page>
-            <error-code>500</error-code>
-            <location>/resources/jsp/user/errorPage.jsp</location>
-        </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/jsp/user/errorPage.jsp</location>
+    </error-page>
 
 
-        <error-page>
-            <error-code>404</error-code>
-            <location>/resources/jsp/user/errorPage.jsp</location>
-        </error-page> -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/jsp/user/errorPage.jsp</location>
+    </error-page>
 </web-app>
