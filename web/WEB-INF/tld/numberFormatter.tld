@@ -10,7 +10,7 @@
     <uri>numberFormatterTag</uri>
     <tag>
         <name>formatNumber</name>
-        <tag-class>main.java.tags.NumberFormatterTag</tag-class>
+        <tag-class>ua.gerasymenko.tags.NumberFormatterTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>format</name>

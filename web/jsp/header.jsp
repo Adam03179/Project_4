@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="true" %>
 
+
 <fmt:setLocale value="${sessionScope.setLocale}"/>
 <fmt:setBundle basename="language"/>
 

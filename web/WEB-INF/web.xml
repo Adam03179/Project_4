@@ -10,7 +10,7 @@
 
     <servlet>
         <servlet-name>Handler</servlet-name>
-        <servlet-class>main.java.controllers.Handler</servlet-class>
+        <servlet-class>ua.gerasymenko.controllers.Handler</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -36,7 +36,7 @@
 
     <filter>
         <filter-name>CharsetFilter</filter-name>
-        <filter-class>main.java.filter.CharsetFilter</filter-class>
+        <filter-class>ua.gerasymenko.filter.CharsetFilter</filter-class>
         <init-param>
             <param-name>requestEncoding</param-name>
             <param-value>UTF-8</param-value>
@@ -50,7 +50,7 @@
 
     <filter>
         <filter-name>rightsFilter</filter-name>
-        <filter-class>main.java.filter.RightsFilter</filter-class>
+        <filter-class>ua.gerasymenko.filter.RightsFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>rightsFilter</filter-name>
@@ -59,7 +59,7 @@
 
     <filter>
         <filter-name>commandFilter</filter-name>
-        <filter-class>main.java.filter.CommandFilter</filter-class>
+        <filter-class>ua.gerasymenko.filter.CommandFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>commandFilter</filter-name>
@@ -69,7 +69,7 @@
 
     <filter>
         <filter-name>securityFilter</filter-name>
-        <filter-class>main.java.filter.SecurityFilter</filter-class>
+        <filter-class>ua.gerasymenko.filter.SecurityFilter</filter-class>
         <init-param>
             <param-name>INDEX_PATH</param-name>
             <param-value>/payments</param-value>
@@ -91,7 +91,7 @@
     </jsp-config>
     <!--Tag config end-->
 
-
+<!--
     <error-page>
         <error-code>500</error-code>
         <location>/jsp/user/errorPage.jsp</location>
@@ -102,4 +102,5 @@
         <error-code>404</error-code>
         <location>/jsp/user/errorPage.jsp</location>
     </error-page>
+    -->
 </web-app>
