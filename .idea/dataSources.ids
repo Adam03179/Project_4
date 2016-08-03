@@ -42,7 +42,7 @@
       <column name="post_code" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="street" sqlType="VARCHAR" precision="36" scale="0" nullable="false" jdbcType="12"/>
       <column name="house_number" sqlType="VARCHAR" precision="7" scale="0" nullable="false" jdbcType="12"/>
-      <column name="apartment_number" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="apartment_number" sqlType="VARCHAR" precision="5" scale="0" nullable="true" jdbcType="12"/>
       <column name="telephone_number" sqlType="VARCHAR" precision="15" scale="0" nullable="true" jdbcType="12"/>
       <column name="email" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
       <column name="region" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>

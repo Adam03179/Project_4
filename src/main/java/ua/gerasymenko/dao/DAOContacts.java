@@ -86,7 +86,7 @@ public class DAOContacts {
 
             while (resultSet.next()) {
 
-                contacts.add(getContactsFromDb(resultSet));
+                contacts.add(getContactsFromDb(resultSet,user));
             }
             return contacts;
 
@@ -104,7 +104,7 @@ public class DAOContacts {
      * @param resultSet
      * @return contacts or null if contacts doesn't exist.
      */
-    private Contacts getContactsFromDb(ResultSet resultSet) {
+    private Contacts getContactsFromDb(ResultSet resultSet, User user) {
         try {
             int id = resultSet.getInt("contacts_id");
             int userId = resultSet.getInt("users_id");
@@ -116,8 +116,7 @@ public class DAOContacts {
             String numOfApartment = resultSet.getString("apartment_number");
             String telephoneNum = resultSet.getString("telephone_number");
             String email = resultSet.getString("email");
-            DAOUser daoUser = daoFactory.getDAOUser();
-            User user = daoUser.getUserById(userId);
+
 
             return new Contacts(user, postCode, region, city, street,
                     numOfHouse, numOfApartment, telephoneNum, email, id);

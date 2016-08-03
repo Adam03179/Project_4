@@ -33,7 +33,6 @@ body{
     vertical-align: middle;
     text-align: center;
     border:2px ridge blue;
-
     font-family: sans-serif;
 
     margin: 0 auto;
@@ -105,8 +104,8 @@ input[type=password]{
 
 #regLink {
     position: fixed;
-    top:67%;
-    left: 48%;
+    top:70%;
+    left: 54%;
     color: rgba(22, 25, 113, 0.20);
     font-weight: 700;
     text-shadow: none;
