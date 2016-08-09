@@ -47,7 +47,9 @@ public class LoginCommand implements Command {
         DAOUser user = factory.getDAOUser();
         boolean isExist = user.isExist(email, password);
 
+
         if (isExist) {
+
             int userId = user.getId(email);
 
             path = ConfigurationManager.getProperty("path.page.main");

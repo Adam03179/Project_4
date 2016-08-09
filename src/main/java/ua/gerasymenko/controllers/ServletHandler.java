@@ -21,7 +21,7 @@ import java.io.IOException;
  *
  * @author Igor Gerasymenko
  */
-public class Handler extends HttpServlet {
+public class ServletHandler extends HttpServlet {
 
     /**
      * This method send all requests to SessionRequestWrapper class for further processing.

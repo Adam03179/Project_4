@@ -10,7 +10,6 @@ import ua.gerasymenko.managers.ConfigurationManager;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -52,7 +51,6 @@ public class RightsFilter implements Filter {
 
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
         DAOFactory daoFactory = DAOFactory.getInstance();
         DAOUser daoUser = daoFactory.getDAOUser();
@@ -70,19 +68,14 @@ public class RightsFilter implements Filter {
                 RequestDispatcher dispatcher = servletRequest.getServletContext()
                         .getRequestDispatcher(ConfigurationManager
                                 .getProperty("path.page.admin"));
-                DAOFactory factory = DAOFactory.getInstance();
-                DAOAccount daoAccount = factory.getDAOAccount();
+                DAOAccount daoAccount = daoFactory.getDAOAccount();
                 List<Account> lockedList = daoAccount.getAllLockedAccounts();
                 req.getSession().setAttribute("lockedList", lockedList);
                 req.getSession().setAttribute("path",ConfigurationManager
                         .getProperty("path.page.admin"));
 
-
-                dispatcher.forward(req, resp);
+                dispatcher.forward(servletRequest, servletResponse);
                 return;
-            } else {
-                servletRequest.getRequestDispatcher(req.getServletPath())
-                        .forward(req, servletResponse);
             }
         }
 
