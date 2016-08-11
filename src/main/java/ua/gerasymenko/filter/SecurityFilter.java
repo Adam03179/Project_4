@@ -6,6 +6,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class SecurityFilter implements Filter {
 
     //all  url of the bank, except the registration page and 'index' page.
-    private final ArrayList<String> allUrls = new ArrayList<>();
+    private final List<String> allUrls = new ArrayList<>();
 
     {
         allUrls.add("/jsp/header.jsp");

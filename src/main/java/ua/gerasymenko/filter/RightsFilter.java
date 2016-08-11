@@ -1,10 +1,7 @@
 package ua.gerasymenko.filter;
 
 
-import ua.gerasymenko.dao.JdbcAccount;
-import ua.gerasymenko.dao.DAOFactory;
-import ua.gerasymenko.dao.JdbcUser;
-import ua.gerasymenko.dao.UserAPI;
+import ua.gerasymenko.dao.*;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.User;
 import ua.gerasymenko.managers.ConfigurationManager;
@@ -68,8 +65,8 @@ public class RightsFilter implements Filter {
                 RequestDispatcher dispatcher = servletRequest.getServletContext()
                         .getRequestDispatcher(ConfigurationManager
                                 .getProperty("path.page.admin"));
-                JdbcAccount jdbcAccount = daoFactory.getDAOAccount();
-                List<Account> lockedList = jdbcAccount.getAllLockedAccounts();
+                AccountAPI account = daoFactory.getDAOAccount();
+                List<Account> lockedList = account.getAllLockedAccounts();
                 req.getSession().setAttribute("lockedList", lockedList);
                 req.getSession().setAttribute("path",ConfigurationManager
                         .getProperty("path.page.admin"));
