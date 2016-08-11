@@ -8,8 +8,8 @@ import java.sql.Date;
  *
  * @author Igor Gerasymenko
  */
-public class Account {
-    private int id;
+public class Account extends Model{
+
     private final User user;
     private final String number;
     private final double interest;

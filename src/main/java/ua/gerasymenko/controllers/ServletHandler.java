@@ -3,7 +3,6 @@ package ua.gerasymenko.controllers;
 
 import ua.gerasymenko.commands.Command;
 import ua.gerasymenko.commands.CommandFactory;
-import ua.gerasymenko.controllers.SessionRequestWrapper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

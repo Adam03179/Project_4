@@ -9,9 +9,9 @@ import java.sql.Timestamp;
  * @author Igor Gerasymenko
  */
 
-public class AccountHistory {
+public class AccountHistory extends Model {
 
-    private int id;
+
     private final Account account;
     private final BigDecimal sum;
     private final String partnerName;

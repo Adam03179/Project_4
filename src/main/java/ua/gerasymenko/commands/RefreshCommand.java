@@ -62,11 +62,11 @@ public class RefreshCommand implements Command {
     private void putAccountsIntoSession(SessionRequestWrapper request) {
 
         factory = DAOFactory.getInstance();
-        DAOAccount daoAccount = factory.getDAOAccount();
+        AccountAPI account = factory.getDAOAccount();
 
         int userId = (Integer) request.getSession().getAttribute("userId");
 
-        List<Account> accountsList = daoAccount.getAllAccounts(userId);
+        List<Account> accountsList = account.getAllAccounts(userId);
 
         request.getSession().setAttribute("accountsList", accountsList);
     }
@@ -80,16 +80,16 @@ public class RefreshCommand implements Command {
     private void putCardsIntoSession(SessionRequestWrapper request) {
 
         factory = DAOFactory.getInstance();
-        DAOAccount daoAccount = factory.getDAOAccount();
-        DAOCard daoCard = factory.getDAOCard();
+        AccountAPI account = factory.getDAOAccount();
+        CardAPI card = factory.getDAOCard();
         int userId = (Integer) request.getSession().getAttribute("userId");
 
-        List<Account> accountList = daoAccount.getAllAccounts(userId);
+        List<Account> accountList = account.getAllAccounts(userId);
         List<Card> cardList = new ArrayList<>();
 
 
-        for (Account account : accountList) {
-            cardList.addAll(daoCard.getAllCards(account.getId()));
+        for (Account acc : accountList) {
+            cardList.addAll(card.getAllCards(acc.getId()));
         }
 
         request.getSession().setAttribute("cardsList", cardList);
@@ -104,16 +104,16 @@ public class RefreshCommand implements Command {
     private void putHistoryIntoSession(SessionRequestWrapper request) {
 
         factory = DAOFactory.getInstance();
-        DAOAccountHistory daoAccountHistory = factory.getDAOAccountHistory();
-        DAOAccount daoAccount = factory.getDAOAccount();
+        AccountHistoryAPI accountHistory = factory.getDAOAccountHistory();
+        AccountAPI account = factory.getDAOAccount();
         int userId = (Integer) request.getSession().getAttribute("userId");
 
         List<AccountHistory> historyList = new ArrayList<>();
 
-        List<Account> accountList = daoAccount.getAllAccounts(userId);
+        List<Account> accountList = account.getAllAccounts(userId);
 
-        for (Account account : accountList) {
-            historyList.addAll(daoAccountHistory.getHistory(account.getId()));
+        for (Account acc : accountList) {
+            historyList.addAll(accountHistory.getHistory(acc.getId()));
         }
 
 

@@ -11,20 +11,20 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
- * The DAOUser class responds for getting and putting information about
+ * The JdbcUser class responds for getting and putting information about
  * user into and from database.
  *
  * @author Igor Gerasymenko
  */
-public class DAOUser {
+public class JdbcUser implements UserAPI {
 
     private DataSource dataSource;
-    private static final Logger logger = Logger.getLogger(DAOUser.class);
+    private static final Logger logger = Logger.getLogger(JdbcUser.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
 
-    public DAOUser(DataSource dataSource) {
+    public JdbcUser(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -34,7 +34,7 @@ public class DAOUser {
      * @param user
      * @return true - if operation successful, false - if operation failed.
      */
-    public boolean addUser(User user) {
+    public boolean create(User user) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psAddClient = connection.prepareStatement
@@ -170,7 +170,7 @@ public class DAOUser {
      * @param id
      * @return User or null if user doesn't exist.
      */
-    public User getUserById(int id) {
+    public User read(int id) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement getUserById = connection.prepareStatement
@@ -185,10 +185,27 @@ public class DAOUser {
             return getUserFromDB(resultSet);
 
         } catch (SQLException e) {
-            logger.error("get user by id error", e);
+            logger.error("read user error", e);
             return null;
         }
 
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psDelete = connection.prepareStatement
+                    (resourceBundle.getString("DELETE_USER"));
+
+            psDelete.setInt(1, id);
+
+            ResultSet resultSet = psDelete.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            logger.error("delete user error ", e);
+            return false;
+        }
     }
 
     /**

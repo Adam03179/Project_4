@@ -9,8 +9,8 @@ import java.sql.Date;
  * @author Igor Gerasymenko
  */
 
-public class Card {
-    private int id;
+public class Card extends Model {
+
     private final Account account;
     private final String number;
     private final int pinCode;

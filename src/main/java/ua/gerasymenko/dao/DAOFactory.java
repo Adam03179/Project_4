@@ -31,24 +31,24 @@ public class DAOFactory {
         return instance;
     }
 
-    public DAOAccount getDAOAccount() {
-        return new DAOAccount(dataSource);
+    public JdbcAccount getDAOAccount() {
+        return new JdbcAccount(dataSource);
     }
 
-    public DAOAccountHistory getDAOAccountHistory() {
-        return new DAOAccountHistory(dataSource);
+    public JdbcAccountHistory getDAOAccountHistory() {
+        return new JdbcAccountHistory(dataSource);
     }
 
-    public DAOCard getDAOCard() {
-        return new DAOCard(dataSource);
+    public JdbcCard getDAOCard() {
+        return new JdbcCard(dataSource);
     }
 
-    public DAOUser getDAOUser() {
-        return new DAOUser(dataSource);
+    public JdbcUser getDAOUser() {
+        return new JdbcUser(dataSource);
     }
 
-    public DAOContacts getDAOContacts() {
-        return new DAOContacts(dataSource);
+    public JdbcContacts getDAOContacts() {
+        return new JdbcContacts(dataSource);
     }
 
 

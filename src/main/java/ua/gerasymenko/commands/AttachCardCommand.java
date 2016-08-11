@@ -1,9 +1,7 @@
 package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOAccount;
-import ua.gerasymenko.dao.DAOCard;
-import ua.gerasymenko.dao.DAOFactory;
+import ua.gerasymenko.dao.*;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.Card;
 import ua.gerasymenko.managers.ConfigurationManager;
@@ -48,25 +46,25 @@ public class AttachCardCommand implements Command {
     public String execute(SessionRequestWrapper request) {
 
         DAOFactory daoFactory = DAOFactory.getInstance();
-        DAOAccount daoAccount = daoFactory.getDAOAccount();
+        AccountAPI account = daoFactory.getDAOAccount();
 
         String numberOfAccount = request.getValueByName("account");
-        Integer accountId = daoAccount.getId(numberOfAccount);
+        Integer accountId = account.getId(numberOfAccount);
         String standard = request.getValueByName("standard");
         Integer pin = Integer.parseInt(request.getValueByName("pin"));
         Calendar year = GregorianCalendar.getInstance();
         year.add(Calendar.YEAR, 1);
         Date expirationDate = new Date(year.getTime().getTime());
         String cardNum = generateCardNumber().toString();
-        Account account = daoAccount.getAccountById(accountId);
+        Account accountForCard = account.read(accountId);
 
-        Card card = new Card(account, cardNum, pin, expirationDate, standard);
-        DAOCard daoCard = daoFactory.getDAOCard();
+        Card card = new Card(accountForCard, cardNum, pin, expirationDate, standard);
+        CardAPI attachedCard = daoFactory.getDAOCard();
 
         boolean isCardCreated = false;
 
-        if (!daoCard.isExist(cardNum)) {
-            isCardCreated = daoCard.addCard(card);
+        if (!attachedCard.isExist(cardNum)) {
+            isCardCreated = attachedCard.create(card);
         }
 
         String path;

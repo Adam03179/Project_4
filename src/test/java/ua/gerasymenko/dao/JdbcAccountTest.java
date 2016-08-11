@@ -12,7 +12,7 @@ import java.sql.Date;
 
 import static org.junit.Assert.*;
 
-public class DAOAccountTest {
+public class JdbcAccountTest {
 
 
     @Test

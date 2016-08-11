@@ -13,25 +13,83 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * The DAOAccountHistory class responds for getting and putting information about
+ * The JdbcAccountHistory class responds for getting and putting information about
  * operations history in bank account.
  *
  * @author Igor Gerasymenko
  */
 
-public class DAOAccountHistory {
+public class JdbcAccountHistory implements AccountHistoryAPI {
     private DataSource dataSource;
     private DAOFactory daoFactory;
 
     private static final Logger logger =
-            Logger.getLogger(DAOAccountHistory.class);
+            Logger.getLogger(JdbcAccountHistory.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
-    public DAOAccountHistory(DataSource dataSource) {
+    public JdbcAccountHistory(DataSource dataSource) {
         this.dataSource = dataSource;
         this.daoFactory = DAOFactory.getInstance();
     }
+
+
+    public boolean create(AccountHistory history) {
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psCreateHistory = connection.prepareStatement
+                    (resourceBundle.getString("WRITE_HISTORY"));
+
+            psCreateHistory.setInt(1, history.getAccount().getId());
+            psCreateHistory.setString(2, history.getOperationType().name());
+            psCreateHistory.setBigDecimal(3, history.getSum());
+            psCreateHistory.setString(4, history.getPartnerName());
+            psCreateHistory.setTimestamp(5, history.getOperationDate());
+            psCreateHistory.execute();
+            return true;
+        } catch (SQLException e) {
+            logger.error("create history error ", e);
+            return false;
+        }
+
+
+    }
+
+    @Override
+    public AccountHistory read(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psGetHistoryById = connection.prepareStatement
+                    (resourceBundle.getString("GET_HISTORY_BY_ID"));
+
+            psGetHistoryById.setInt(1, id);
+            ResultSet result = psGetHistoryById.executeQuery();
+
+            result.next();
+            return getAccountHistoryFromDB(result);
+
+        } catch (SQLException e) {
+            logger.error("read history by id error", e);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psDelete = connection.prepareStatement
+                    (resourceBundle.getString("DELETE_HISTORY"));
+
+            psDelete.setInt(1, id);
+
+            ResultSet resultSet = psDelete.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            logger.error("delete history error ", e);
+            return false;
+        }
+    }
+
 
     /**
      * This method adds to database information about operation in bank account.
@@ -113,8 +171,8 @@ public class DAOAccountHistory {
             OperationType operationType = OperationType.valueOf
                     (resultSet.getString("operation_type").toUpperCase());
 
-            DAOAccount daoAccount = daoFactory.getDAOAccount();
-            Account account = daoAccount.getAccountById(accountId);
+            JdbcAccount jdbcAccount = daoFactory.getDAOAccount();
+            Account account = jdbcAccount.read(accountId);
 
             return new AccountHistory(id, account, sum, partnerName,
                     operationDate, operationType);

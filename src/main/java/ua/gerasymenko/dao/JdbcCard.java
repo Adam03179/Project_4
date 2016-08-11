@@ -11,21 +11,21 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * The DAOCard class responds for getting and putting information about
+ * The JdbcCard class responds for getting and putting information about
  * bank cards.
  *
  * @author Igor Gerasymenko
  */
 
-public class DAOCard {
+public class JdbcCard implements CardAPI {
 
     private DataSource dataSource;
     private DAOFactory daoFactory;
-    private static final Logger logger = Logger.getLogger(DAOCard.class);
+    private static final Logger logger = Logger.getLogger(JdbcCard.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
-    public DAOCard(DataSource dataSource) {
+    public JdbcCard(DataSource dataSource) {
         this.dataSource = dataSource;
         this.daoFactory = DAOFactory.getInstance();
     }
@@ -37,12 +37,11 @@ public class DAOCard {
      * @return true - if operation successful, false - if operation failed.
      */
 
-    public boolean addCard(Card card) {
+    public boolean create(Card card) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psAddCard = connection.prepareStatement
                     (resourceBundle.getString("ADD_CARD"));
-
 
             psAddCard.setInt(1, card.getAccount().getId());
             psAddCard.setString(2, card.getNumber());
@@ -53,11 +52,46 @@ public class DAOCard {
             return true;
 
         } catch (SQLException e) {
-            logger.error("add card error", e);
+            logger.error("create card error", e);
             return false;
         }
 
 
+    }
+
+    @Override
+    public Card read(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psGetCardById = connection.prepareStatement
+                    (resourceBundle.getString("GET_CARD_BY_ID"));
+
+            psGetCardById.setInt(1, id);
+            ResultSet result = psGetCardById.executeQuery();
+
+            result.next();
+            return getCardFromDb(result);
+
+        } catch (SQLException e) {
+            logger.error("read card error", e);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psDelete = connection.prepareStatement
+                    (resourceBundle.getString("DELETE_CARD"));
+
+            psDelete.setInt(1, id);
+
+            ResultSet resultSet = psDelete.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            logger.error("delete card error ", e);
+            return false;
+        }
     }
 
     /**
@@ -130,8 +164,8 @@ public class DAOCard {
             int pin = resultSet.getInt("pin_code");
             Date expirationDate = resultSet.getDate("expiration_date");
 
-            DAOAccount daoAccount = daoFactory.getDAOAccount();
-            Account account = daoAccount.getAccountById(accountId);
+            JdbcAccount jdbcAccount = daoFactory.getDAOAccount();
+            Account account = jdbcAccount.read(accountId);
 
 
             return new Card(id, account, number, pin, expirationDate, standard);

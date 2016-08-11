@@ -15,19 +15,19 @@ import java.util.ResourceBundle;
 
 
 /**
- * The DAOContacts class responds for getting and putting information about
+ * The JdbcContacts class responds for getting and putting information about
  * user's contacts into and from database.
  *
  * @author Igor Gerasymenko
  */
-public class DAOContacts {
+public class JdbcContacts implements ContactsAPI {
     private DataSource dataSource;
     private DAOFactory daoFactory;
-    private static final Logger logger = Logger.getLogger(DAOCard.class);
+    private static final Logger logger = Logger.getLogger(JdbcCard.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
-    public DAOContacts(DataSource dataSource) {
+    public JdbcContacts(DataSource dataSource) {
         this.daoFactory = DAOFactory.getInstance();
         this.dataSource = dataSource;
 
@@ -39,7 +39,7 @@ public class DAOContacts {
      * @param contacts
      * @return true - if operation successful, false - if operation failed.
      */
-    public boolean addContacts(Contacts contacts) {
+    public boolean create(Contacts contacts) {
 
 
         try (Connection connection = dataSource.getConnection()) {
@@ -67,26 +67,61 @@ public class DAOContacts {
 
     }
 
+    @Override
+    public Contacts read(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psGetContactsById = connection.prepareStatement
+                    (resourceBundle.getString("GET_CONTACTS_BY_ID"));
+
+            psGetContactsById.setInt(1, id);
+            ResultSet result = psGetContactsById.executeQuery();
+
+            result.next();
+            return getContactsFromDb(result);
+
+        } catch (SQLException e) {
+            logger.error("read card error", e);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psDelete = connection.prepareStatement
+                    (resourceBundle.getString("DELETE_CONTACTS"));
+
+            psDelete.setInt(1, id);
+
+            ResultSet resultSet = psDelete.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            logger.error("delete contacts error ", e);
+            return false;
+        }
+    }
+
     /**
      * This method gets information about contacts one specific user .
      *
-     * @param user
+     * @param userId
      * @return list of all contacts of one user
      */
-    public List<Contacts> getContacts(User user) {
+    public List<Contacts> getContacts(int userId) {
 
         List<Contacts> contacts = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psGetContacts = connection.prepareStatement
                     (resourceBundle.getString("GET_CONTACTS"));
-            psGetContacts.setInt(1, user.getId());
+            psGetContacts.setInt(1, userId);
 
             ResultSet resultSet = psGetContacts.executeQuery();
 
             while (resultSet.next()) {
 
-                contacts.add(getContactsFromDb(resultSet,user));
+                contacts.add(getContactsFromDb(resultSet));
             }
             return contacts;
 
@@ -104,7 +139,7 @@ public class DAOContacts {
      * @param resultSet
      * @return contacts or null if contacts doesn't exist.
      */
-    private Contacts getContactsFromDb(ResultSet resultSet, User user) {
+    private Contacts getContactsFromDb(ResultSet resultSet) {
         try {
             int id = resultSet.getInt("contacts_id");
             int userId = resultSet.getInt("users_id");
@@ -117,7 +152,8 @@ public class DAOContacts {
             String telephoneNum = resultSet.getString("telephone_number");
             String email = resultSet.getString("email");
 
-
+            JdbcUser jdbcUser = daoFactory.getDAOUser();
+            User user = jdbcUser.read(userId);
             return new Contacts(user, postCode, region, city, street,
                     numOfHouse, numOfApartment, telephoneNum, email, id);
 

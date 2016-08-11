@@ -1,4 +1,3 @@
-<%@page errorPage="errorPage.jsp" %>
 <%@include file="/jsp/header.jsp" %>
 <%@taglib uri="numberFormatterTag" prefix="numformat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

@@ -1,9 +1,7 @@
 package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOContacts;
-import ua.gerasymenko.dao.DAOFactory;
-import ua.gerasymenko.dao.DAOUser;
+import ua.gerasymenko.dao.*;
 import ua.gerasymenko.models.Contacts;
 import ua.gerasymenko.models.User;
 import ua.gerasymenko.managers.ConfigurationManager;
@@ -54,13 +52,13 @@ public class RegistrationCommand implements Command {
                 Integer.parseInt(request.getValueByName("numberOfPassport"));
         String seriesOfPassport = request.getValueByName("seriesOfPassport");
 
-        User user = new User(name, surname, individualTaxNumber, logIn,
+        User userForContacts = new User(name, surname, individualTaxNumber, logIn,
                 password, numberOfPassport, seriesOfPassport, false);
 
         DAOFactory factory = DAOFactory.getInstance();
-        DAOUser daoUser = factory.getDAOUser();
+        UserAPI user = factory.getDAOUser();
 
-        boolean isUserAdded = daoUser.addUser(user);
+        boolean isUserAdded = user.create(userForContacts);
 
         String city = request.getValueByName("city");
         int postCode = Integer.parseInt(request.getValueByName("postCode"));
@@ -71,24 +69,23 @@ public class RegistrationCommand implements Command {
         String email = request.getValueByName("email");
         String region = request.getValueByName("region");
 
-        Contacts contacts = new Contacts(user, postCode, region, city, street,
+        Contacts newContacts = new Contacts(userForContacts, postCode, region, city, street,
                 numberOfHouse, numberOfApartment, telephoneNumber, email);
 
 
-        DAOContacts daoContacts = factory.getDAOContacts();
+        ContactsAPI contacts = factory.getDAOContacts();
 
-        boolean isContactsAdded = daoContacts.addContacts(contacts);
+        boolean isContactsAdded = contacts.create(newContacts);
 
 
         if (isContactsAdded && isUserAdded) {
             path = ConfigurationManager.getProperty("path.page.index");
             request.getSession().setAttribute("path", path);
-            return path;
         } else {
             path = ConfigurationManager.getProperty("path.page.error");
             request.getSession().setAttribute("path", path);
-            return path;
         }
+        return path;
 
     }
 }

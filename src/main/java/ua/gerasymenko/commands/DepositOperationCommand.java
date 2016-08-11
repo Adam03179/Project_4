@@ -1,7 +1,8 @@
 package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOAccount;
+import ua.gerasymenko.dao.AccountAPI;
+import ua.gerasymenko.dao.JdbcAccount;
 import ua.gerasymenko.dao.DAOFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
@@ -47,17 +48,17 @@ public class DepositOperationCommand implements Command {
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-        String path = ConfigurationManager.getProperty("path.page.operationSuccess");
+        String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
         request.getSession().setAttribute("path", path);
 
         DAOFactory daoFactory = DAOFactory.getInstance();
-        DAOAccount daoAccount = daoFactory.getDAOAccount();
+        AccountAPI account = daoFactory.getDAOAccount();
 
-        String numberOfAccount = request.getValueByName("deposit");
+        String accountNumber = request.getValueByName("deposit");
         BigDecimal sum = new BigDecimal(request.getValueByName("sum"));
-        int accountId = daoAccount.getId(numberOfAccount);
+        int accountId = account.getId(accountNumber);
 
-        Account account = daoAccount.getAccountById(accountId);
+        Account accountForHistory = account.read(accountId);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 
 
@@ -66,13 +67,13 @@ public class DepositOperationCommand implements Command {
             path = ConfigurationManager.getProperty("path.page.error");
 
         } else {
-            AccountHistory accountHistory = new AccountHistory(account,
-                    sum, account.getUser().getName() + " "
-                    + account.getUser().getSurname(), timestamp,
+            AccountHistory accountHistory = new AccountHistory(accountForHistory,
+                    sum, accountForHistory.getUser().getName() + " "
+                    + accountForHistory.getUser().getSurname(), timestamp,
                     OperationType.DEPOSIT);
 
             try {
-                daoAccount.addFunds(accountHistory);
+                account.addFunds(accountHistory);
             } catch (SQLException e) {
                 logger.error("Deposit operation command error", e);
                 return "path.page.error";

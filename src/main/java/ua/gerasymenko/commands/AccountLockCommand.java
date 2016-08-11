@@ -1,7 +1,8 @@
 package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOAccount;
+import ua.gerasymenko.dao.AccountAPI;
+import ua.gerasymenko.dao.JdbcAccount;
 import ua.gerasymenko.dao.DAOFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
@@ -53,24 +54,23 @@ public class AccountLockCommand implements Command {
 
 
         DAOFactory daoFactory = DAOFactory.getInstance();
-        DAOAccount daoAccount = daoFactory.getDAOAccount();
+        AccountAPI account = daoFactory.getDAOAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("lock").split(" ")[0];
 
-        int accountId = daoAccount.getId(numberOfAccount);
+        int accountId = account.getId(numberOfAccount);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 
-        Account account = daoAccount.getAccountById(accountId);
+        Account accountForHistory = account.read(accountId);
 
-
-        AccountHistory accountHistory = new AccountHistory(account,
-                account.getBalance(), account.getUser().getName()+" "
-                + account.getUser().getSurname(), timestamp,
+        AccountHistory accountHistory = new AccountHistory(accountForHistory,
+                accountForHistory.getBalance(), accountForHistory.getUser().getName()+" "
+                + accountForHistory.getUser().getSurname(), timestamp,
                 OperationType.LOCK);
 
         try {
-            daoAccount.lockAccount(accountHistory);
+            account.lockAccount(accountHistory);
         } catch (SQLException e) {
             logger.error("Account lock command error", e);
         }

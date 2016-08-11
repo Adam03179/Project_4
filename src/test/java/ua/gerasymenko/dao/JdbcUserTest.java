@@ -6,13 +6,13 @@ import ua.gerasymenko.models.User;
 
 import static org.junit.Assert.*;
 
-public class DAOUserTest {
-    private DAOUser daoUser;
+public class JdbcUserTest {
+    private JdbcUser jdbcUser;
     private User user;
 
     @Before
     public void setUp() {
-        daoUser = new DAOUser(DataSourceTest.getSource());
+        jdbcUser = new JdbcUser(DataSourceTest.getSource());
         user = new User(12, "test", "test", "test", "test", "test",
                 0, "test", false);
     }
@@ -20,7 +20,7 @@ public class DAOUserTest {
     @Test
     public void testAddUser() throws Exception {
 
-        assertTrue(daoUser.addUser(user));
+        assertTrue(jdbcUser.create(user));
 
     }
 
@@ -28,26 +28,26 @@ public class DAOUserTest {
     @Test
     public void testGetUser() throws Exception {
 
-        assertEquals("test", daoUser.getUser("test", "test").getName());
-    }
+        assertEquals("test", jdbcUser.getUser("test", "test").getName());
+}
 
     @Test
     public void testIsExist() throws Exception {
-        assertTrue(daoUser.isExist("test", "test"));
+        assertTrue(jdbcUser.isExist("test", "test"));
     }
 
     @Test
     public void testGetId() throws Exception {
-        assertEquals((Object) 12, daoUser.getId("test"));
+        assertEquals((Object) 16, jdbcUser.getId("test"));
     }
 
     @Test
     public void testIsAdmin() throws Exception {
-        assertFalse(daoUser.isAdmin(12));
+        assertFalse(jdbcUser.isAdmin(16));
     }
 
     @Test
     public void testGetUserById() throws Exception {
-        assertEquals("test", daoUser.getUserById(12).getName());
+        assertEquals("test", jdbcUser.read(16).getName());
     }
 }

@@ -6,7 +6,7 @@ package ua.gerasymenko.models;
  * @author Igor Gerasymenko
  */
 
-public class Contacts {
+public class Contacts extends Model {
     private int id;
     private final User user;
     private final int postCode;

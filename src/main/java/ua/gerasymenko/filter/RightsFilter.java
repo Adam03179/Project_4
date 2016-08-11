@@ -1,9 +1,10 @@
 package ua.gerasymenko.filter;
 
 
-import ua.gerasymenko.dao.DAOAccount;
+import ua.gerasymenko.dao.JdbcAccount;
 import ua.gerasymenko.dao.DAOFactory;
-import ua.gerasymenko.dao.DAOUser;
+import ua.gerasymenko.dao.JdbcUser;
+import ua.gerasymenko.dao.UserAPI;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.User;
 import ua.gerasymenko.managers.ConfigurationManager;
@@ -53,23 +54,22 @@ public class RightsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
         DAOFactory daoFactory = DAOFactory.getInstance();
-        DAOUser daoUser = daoFactory.getDAOUser();
+        UserAPI user = daoFactory.getDAOUser();
 
         String logIn = req.getParameter("email");
         String password = req.getParameter("password");
 
-        boolean isExist = daoUser.isExist(logIn, password);
+        boolean isExist = user.isExist(logIn, password);
 
 
         if (isExist) {
-            User user = daoUser.getUser(logIn, password);
 
-            if (daoUser.isAdmin(user.getId())) {
+            if (user.isAdmin(user.getUser(logIn, password).getId())) {
                 RequestDispatcher dispatcher = servletRequest.getServletContext()
                         .getRequestDispatcher(ConfigurationManager
                                 .getProperty("path.page.admin"));
-                DAOAccount daoAccount = daoFactory.getDAOAccount();
-                List<Account> lockedList = daoAccount.getAllLockedAccounts();
+                JdbcAccount jdbcAccount = daoFactory.getDAOAccount();
+                List<Account> lockedList = jdbcAccount.getAllLockedAccounts();
                 req.getSession().setAttribute("lockedList", lockedList);
                 req.getSession().setAttribute("path",ConfigurationManager
                         .getProperty("path.page.admin"));

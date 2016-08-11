@@ -1,7 +1,8 @@
 package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOAccount;
+import ua.gerasymenko.dao.AccountAPI;
+import ua.gerasymenko.dao.JdbcAccount;
 import ua.gerasymenko.dao.DAOFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
@@ -45,31 +46,31 @@ public class WithdrawOperationCommand implements Command {
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-        String path = ConfigurationManager.getProperty("path.page.operationSuccess");
+        String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
         request.getSession().setAttribute("path", path);
 
         DAOFactory daoFactory = DAOFactory.getInstance();
-        DAOAccount daoAccount = daoFactory.getDAOAccount();
+        AccountAPI account = daoFactory.getDAOAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("withdraw").split(" ")[0];
         BigDecimal sum = new BigDecimal(request.getValueByName("sum"));
-        int accountId = daoAccount.getId(numberOfAccount);
+        int accountId = account.getId(numberOfAccount);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
-        Account account = daoAccount.getAccountById(accountId);
+        Account accountForHistory = account.read(accountId);
 
         int compare = sum.compareTo(new BigDecimal(0));
 
-        if (sum.compareTo(account.getBalance()) > 0 || compare < 0) {
+        if (sum.compareTo(accountForHistory.getBalance()) > 0 || compare < 0) {
             path = ConfigurationManager.getProperty("path.page.error");
         } else {
-            AccountHistory accountHistory = new AccountHistory(account,
-                    sum, account.getUser().getName() + " "
-                    + account.getUser().getSurname(), timestamp,
+            AccountHistory accountHistory = new AccountHistory(accountForHistory,
+                    sum, accountForHistory.getUser().getName() + " "
+                    + accountForHistory.getUser().getSurname(), timestamp,
                     OperationType.WITHDRAW);
 
             try {
-                daoAccount.withdrawFunds(accountHistory);
+                account.withdrawFunds(accountHistory);
             } catch (SQLException e) {
                 logger.error("Withdraw operation command error", e);
             }

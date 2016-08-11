@@ -14,21 +14,21 @@ import java.util.ResourceBundle;
 
 
 /**
- * The DAOAccount class responds for getting and putting information about
+ * The JdbcAccount class responds for getting and putting information about
  * bank account into and from database.
  *
  * @author Igor Gerasymenko
  */
-public class DAOAccount {
+public class JdbcAccount implements AccountAPI {
     private DataSource dataSource;
     private DAOFactory daoFactory;
 
-    private static final Logger logger = Logger.getLogger(DAOAccount.class);
+    private static final Logger logger = Logger.getLogger(JdbcAccount.class);
 
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
-    public DAOAccount(DataSource dataSource) {
+    public JdbcAccount(DataSource dataSource) {
         this.daoFactory = DAOFactory.getInstance();
         this.dataSource = dataSource;
     }
@@ -39,7 +39,7 @@ public class DAOAccount {
      * @param account
      * @return true - if operation successful, false - if operation failed.
      */
-    public boolean createAccount(Account account) {
+    public boolean create(Account account) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psCreateAccount = connection.prepareStatement
@@ -75,7 +75,7 @@ public class DAOAccount {
 
         try {
 
-            DAOAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psLockAccount = connection.prepareStatement
@@ -108,7 +108,7 @@ public class DAOAccount {
 
         try {
 
-            DAOAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement preparedStatement = connection.prepareStatement
@@ -169,7 +169,7 @@ public class DAOAccount {
 
         try {
 
-            DAOAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psAddFunds = connection.prepareStatement
@@ -205,7 +205,7 @@ public class DAOAccount {
         connection.setAutoCommit(false);
 
         try {
-            DAOAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
@@ -243,7 +243,7 @@ public class DAOAccount {
         connection.setAutoCommit(false);
 
         try {
-            DAOAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
@@ -329,7 +329,7 @@ public class DAOAccount {
      * @param accountId
      * @return Account or null if account doesn't exist.
      */
-    public Account getAccountById(int accountId) {
+    public Account read(int accountId) {
 
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psGetAccById = connection.prepareStatement
@@ -344,6 +344,24 @@ public class DAOAccount {
         } catch (SQLException e) {
             logger.error("get account by id error", e);
             return null;
+        }
+
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psDelete = connection.prepareStatement
+                    (resourceBundle.getString("DELETE_ACCOUNT"));
+
+            psDelete.setInt(1, id);
+
+            ResultSet resultSet = psDelete.executeQuery();
+            return resultSet.next();
+
+        } catch (SQLException e) {
+            logger.error("delete account error ", e);
+            return false;
         }
 
     }
@@ -390,8 +408,8 @@ public class DAOAccount {
             boolean isBlocked = resultSet.getBoolean("is_blocked");
             int usersId = resultSet.getInt("users_id");
 
-            DAOUser daoUser = daoFactory.getDAOUser();
-            User user = daoUser.getUserById(usersId);
+            JdbcUser jdbcUser = daoFactory.getDAOUser();
+            User user = jdbcUser.read(usersId);
 
             return new Account(id, user, number, interest,
                     openDate, balance, currency, isBlocked);

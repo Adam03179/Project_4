@@ -2,7 +2,6 @@ package ua.gerasymenko.dao;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.Card;
@@ -11,10 +10,8 @@ import ua.gerasymenko.models.User;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-import static org.junit.Assert.*;
-
-public class DAOCardTest {
-    private DAOCard daoCard;
+public class JdbcCardTest {
+    private JdbcCard jdbcCard;
     //private DAOFactory daoFactory = PowerMockito.mock(DAOFactory.class);
     private User user;
     private Account account;
@@ -23,7 +20,7 @@ public class DAOCardTest {
     @Before
     public void setUp() {
       //  Mockito.reset(daoFactory);
-        daoCard = new DAOCard(DataSourceTest.getSource());
+        jdbcCard = new JdbcCard(DataSourceTest.getSource());
 
         user = new User(12, "test", "test", "test", "test", "test",
                 0, "test", false);
@@ -38,9 +35,9 @@ public class DAOCardTest {
     @Test
     public void testAddCard() throws Exception {
      //   Mockito.when(DAOFactory.getInstance()).thenReturn(daoFactory);
-     //   Mockito.verify(daoCard.addCard(card));
+     //   Mockito.verify(jdbcCard.create(card));
 
-        //assertTrue(daoCard.addCard(card));
+        //assertTrue(jdbcCard.create(card));
     }
 
     @Test

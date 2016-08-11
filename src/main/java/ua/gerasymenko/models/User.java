@@ -5,8 +5,8 @@ package ua.gerasymenko.models;
  *
  * @author Igor Gerasymenko
  */
-public class User {
-    private int id;
+public class User extends Model{
+
     private final String name;
     private final String surname;
     private final String individualTaxNumber;

@@ -2,9 +2,7 @@ package ua.gerasymenko.commands;
 
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOAccount;
-import ua.gerasymenko.dao.DAOFactory;
-import ua.gerasymenko.dao.DAOUser;
+import ua.gerasymenko.dao.*;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.managers.ConfigurationManager;
 
@@ -55,29 +53,28 @@ public class OpenAccountCommand implements Command {
         String currency = "UAH";
 
         DAOFactory daoFactory = DAOFactory.getInstance();
-        DAOUser daoUser = daoFactory.getDAOUser();
+        UserAPI user = daoFactory.getDAOUser();
 
-        Account account = new Account(daoUser.getUserById(userId),
+        Account newAccount = new Account(user.read(userId),
                 numberOfAccount, interest, openDate, balance, currency,
                 false);
 
-        DAOAccount daoAccount = daoFactory.getDAOAccount();
+        AccountAPI account = daoFactory.getDAOAccount();
         boolean isAccountCreated = false;
 
-        while (!daoAccount.isExist(numberOfAccount)) {
-            isAccountCreated = daoAccount.createAccount(account);
+        while (!account.isExist(numberOfAccount)) {
+            isAccountCreated = account.create(newAccount);
         }
         String path;
 
         if (isAccountCreated) {
             path = ConfigurationManager.getProperty("path.page.operationSuccess");
             request.getSession().setAttribute("path", path);
-            return path;
         } else {
             path = ConfigurationManager.getProperty("path.page.error");
             request.getSession().setAttribute("path", path);
-            return path;
         }
+        return path;
 
     }
 
