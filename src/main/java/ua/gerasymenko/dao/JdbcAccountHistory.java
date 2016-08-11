@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class JdbcAccountHistory implements AccountHistoryAPI {
     private DataSource dataSource;
-    private DAOFactory daoFactory;
+    private JdbcFactory jdbcFactory;
 
     private static final Logger logger =
             Logger.getLogger(JdbcAccountHistory.class);
@@ -30,7 +30,7 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
 
     public JdbcAccountHistory(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.daoFactory = DAOFactory.getInstance();
+        this.jdbcFactory = JdbcFactory.getInstance();
     }
 
 
@@ -171,7 +171,7 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
             OperationType operationType = OperationType.valueOf
                     (resultSet.getString("operation_type").toUpperCase());
 
-            JdbcAccount jdbcAccount = daoFactory.getDAOAccount();
+            JdbcAccount jdbcAccount = jdbcFactory.getDAOAccount();
             Account account = jdbcAccount.read(accountId);
 
             return new AccountHistory(id, account, sum, partnerName,

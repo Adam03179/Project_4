@@ -3,7 +3,6 @@ package ua.gerasymenko.filter;
 
 import ua.gerasymenko.dao.*;
 import ua.gerasymenko.models.Account;
-import ua.gerasymenko.models.User;
 import ua.gerasymenko.managers.ConfigurationManager;
 
 import javax.servlet.*;
@@ -50,8 +49,8 @@ public class RightsFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        UserAPI user = daoFactory.getDAOUser();
+        JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+        UserAPI user = jdbcFactory.getDAOUser();
 
         String logIn = req.getParameter("email");
         String password = req.getParameter("password");
@@ -65,7 +64,7 @@ public class RightsFilter implements Filter {
                 RequestDispatcher dispatcher = servletRequest.getServletContext()
                         .getRequestDispatcher(ConfigurationManager
                                 .getProperty("path.page.admin"));
-                AccountAPI account = daoFactory.getDAOAccount();
+                AccountAPI account = jdbcFactory.getDAOAccount();
                 List<Account> lockedList = account.getAllLockedAccounts();
                 req.getSession().setAttribute("lockedList", lockedList);
                 req.getSession().setAttribute("path",ConfigurationManager

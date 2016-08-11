@@ -12,7 +12,7 @@ import java.sql.Date;
 
 public class JdbcCardTest {
     private JdbcCard jdbcCard;
-    //private DAOFactory daoFactory = PowerMockito.mock(DAOFactory.class);
+    //private JdbcFactory daoFactory = PowerMockito.mock(JdbcFactory.class);
     private User user;
     private Account account;
     private Card card;
@@ -34,7 +34,7 @@ public class JdbcCardTest {
 
     @Test
     public void testAddCard() throws Exception {
-     //   Mockito.when(DAOFactory.getInstance()).thenReturn(daoFactory);
+     //   Mockito.when(JdbcFactory.getInstance()).thenReturn(daoFactory);
      //   Mockito.verify(jdbcCard.create(card));
 
         //assertTrue(jdbcCard.create(card));

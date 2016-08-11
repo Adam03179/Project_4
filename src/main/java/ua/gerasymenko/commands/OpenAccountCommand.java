@@ -52,14 +52,14 @@ public class OpenAccountCommand implements Command {
         BigDecimal balance = new BigDecimal(100);
         String currency = "UAH";
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        UserAPI user = daoFactory.getDAOUser();
+        JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+        UserAPI user = jdbcFactory.getDAOUser();
 
         Account newAccount = new Account(user.read(userId),
                 numberOfAccount, interest, openDate, balance, currency,
                 false);
 
-        AccountAPI account = daoFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getDAOAccount();
         boolean isAccountCreated = false;
 
         while (!account.isExist(numberOfAccount)) {

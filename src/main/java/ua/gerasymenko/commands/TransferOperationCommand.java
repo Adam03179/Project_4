@@ -2,8 +2,7 @@ package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
 import ua.gerasymenko.dao.AccountAPI;
-import ua.gerasymenko.dao.JdbcAccount;
-import ua.gerasymenko.dao.DAOFactory;
+import ua.gerasymenko.dao.JdbcFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
 import ua.gerasymenko.models.OperationType;
@@ -52,8 +51,8 @@ public class TransferOperationCommand implements Command {
         String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
         request.getSession().setAttribute("path", path);
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        AccountAPI account = daoFactory.getDAOAccount();
+        JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+        AccountAPI account = jdbcFactory.getDAOAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("transfer").split(" ")[0];
@@ -68,7 +67,10 @@ public class TransferOperationCommand implements Command {
         Account partnerAccount = account.read(partnerAccountId);
         int compare = sum.compareTo(new BigDecimal(0));
 
-        if (sum.compareTo(accountForHistory.getBalance()) > 0 || !account.isExist(numberOfPartnersAcc)
+        //checks for enough money in the account and the
+        // presence of the account partner in the system and amount is a positive number
+        if (sum.compareTo(accountForHistory.getBalance()) > 0
+                || !account.isExist(numberOfPartnersAcc)
                 || compare < 0) {
             path = ConfigurationManager.getProperty("path.page.error");
         } else {

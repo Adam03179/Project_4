@@ -2,8 +2,7 @@ package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
 import ua.gerasymenko.dao.AccountAPI;
-import ua.gerasymenko.dao.JdbcAccount;
-import ua.gerasymenko.dao.DAOFactory;
+import ua.gerasymenko.dao.JdbcFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
 import ua.gerasymenko.models.OperationType;
@@ -51,8 +50,8 @@ public class DepositOperationCommand implements Command {
         String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
         request.getSession().setAttribute("path", path);
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        AccountAPI account = daoFactory.getDAOAccount();
+        JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+        AccountAPI account = jdbcFactory.getDAOAccount();
 
         String accountNumber = request.getValueByName("deposit");
         BigDecimal sum = new BigDecimal(request.getValueByName("sum"));

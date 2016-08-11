@@ -7,23 +7,23 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
- * The DAOFactory class 'makes' all others DAO objects. This class is singleton.
+ * The JdbcFactory class 'makes' all others Jdbc objects. This class is singleton.
  *
  */
-public class DAOFactory {
-    private static final Logger logger = Logger.getLogger(DAOFactory.class);
-    private static DAOFactory instance = null;
+public class JdbcFactory {
+    private static final Logger logger = Logger.getLogger(JdbcFactory.class);
+    private static JdbcFactory instance = null;
     private DataSource dataSource;
 
-    private DAOFactory() throws NamingException {
+    private JdbcFactory() throws NamingException {
         InitialContext initialContext = new InitialContext();
         dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/payments");
     }
 
-    public static synchronized DAOFactory getInstance() {
+    public static synchronized JdbcFactory getInstance() {
         if (instance == null) {
             try {
-                return new DAOFactory();
+                return new JdbcFactory();
             } catch (NamingException e) {
                 logger.error("Instance error ", e);
             }

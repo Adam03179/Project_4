@@ -20,14 +20,14 @@ import java.util.ResourceBundle;
 public class JdbcCard implements CardAPI {
 
     private DataSource dataSource;
-    private DAOFactory daoFactory;
+    private JdbcFactory jdbcFactory;
     private static final Logger logger = Logger.getLogger(JdbcCard.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
     public JdbcCard(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.daoFactory = DAOFactory.getInstance();
+        this.jdbcFactory = JdbcFactory.getInstance();
     }
 
     /**
@@ -164,7 +164,7 @@ public class JdbcCard implements CardAPI {
             int pin = resultSet.getInt("pin_code");
             Date expirationDate = resultSet.getDate("expiration_date");
 
-            JdbcAccount jdbcAccount = daoFactory.getDAOAccount();
+            JdbcAccount jdbcAccount = jdbcFactory.getDAOAccount();
             Account account = jdbcAccount.read(accountId);
 
 

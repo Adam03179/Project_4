@@ -2,8 +2,7 @@ package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
 import ua.gerasymenko.dao.AccountAPI;
-import ua.gerasymenko.dao.JdbcAccount;
-import ua.gerasymenko.dao.DAOFactory;
+import ua.gerasymenko.dao.JdbcFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
 import ua.gerasymenko.models.OperationType;
@@ -20,6 +19,7 @@ import java.time.LocalDateTime;
  * This class is Singleton.
  * It implements interface Command, and it is part of Command and Factory patterns.
  * It includes only one method, which executes all needed task.
+ *
  * @author Igor Gerasymenko
  */
 public class WithdrawOperationCommand implements Command {
@@ -41,7 +41,8 @@ public class WithdrawOperationCommand implements Command {
      * It uses SessionRequestWrapper to initialized all needed parameters
      * for creating Account class. If operation was success
      * it returns path to success-page to user, if not - error page.
-     * @param  request
+     *
+     * @param request
      * @return path to next page
      */
     @Override
@@ -49,8 +50,8 @@ public class WithdrawOperationCommand implements Command {
         String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
         request.getSession().setAttribute("path", path);
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        AccountAPI account = daoFactory.getDAOAccount();
+        JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+        AccountAPI account = jdbcFactory.getDAOAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("withdraw").split(" ")[0];
@@ -61,6 +62,7 @@ public class WithdrawOperationCommand implements Command {
 
         int compare = sum.compareTo(new BigDecimal(0));
 
+        //checks for enough money in the account and amount is a positive number
         if (sum.compareTo(accountForHistory.getBalance()) > 0 || compare < 0) {
             path = ConfigurationManager.getProperty("path.page.error");
         } else {

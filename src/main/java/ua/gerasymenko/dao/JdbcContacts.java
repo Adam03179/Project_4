@@ -22,13 +22,13 @@ import java.util.ResourceBundle;
  */
 public class JdbcContacts implements ContactsAPI {
     private DataSource dataSource;
-    private DAOFactory daoFactory;
+    private JdbcFactory jdbcFactory;
     private static final Logger logger = Logger.getLogger(JdbcCard.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
     public JdbcContacts(DataSource dataSource) {
-        this.daoFactory = DAOFactory.getInstance();
+        this.jdbcFactory = JdbcFactory.getInstance();
         this.dataSource = dataSource;
 
     }
@@ -152,7 +152,7 @@ public class JdbcContacts implements ContactsAPI {
             String telephoneNum = resultSet.getString("telephone_number");
             String email = resultSet.getString("email");
 
-            JdbcUser jdbcUser = daoFactory.getDAOUser();
+            JdbcUser jdbcUser = jdbcFactory.getDAOUser();
             User user = jdbcUser.read(userId);
             return new Contacts(user, postCode, region, city, street,
                     numOfHouse, numOfApartment, telephoneNum, email, id);

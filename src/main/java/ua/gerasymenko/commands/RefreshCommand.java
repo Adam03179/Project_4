@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class RefreshCommand implements Command {
 
-    private DAOFactory factory = DAOFactory.getInstance();
+    private JdbcFactory factory = JdbcFactory.getInstance();
 
     private static RefreshCommand instance = null;
 
@@ -61,7 +61,7 @@ public class RefreshCommand implements Command {
      */
     private void putAccountsIntoSession(SessionRequestWrapper request) {
 
-        factory = DAOFactory.getInstance();
+        factory = JdbcFactory.getInstance();
         AccountAPI account = factory.getDAOAccount();
 
         int userId = (Integer) request.getSession().getAttribute("userId");
@@ -79,7 +79,7 @@ public class RefreshCommand implements Command {
      */
     private void putCardsIntoSession(SessionRequestWrapper request) {
 
-        factory = DAOFactory.getInstance();
+        factory = JdbcFactory.getInstance();
         AccountAPI account = factory.getDAOAccount();
         CardAPI card = factory.getDAOCard();
         int userId = (Integer) request.getSession().getAttribute("userId");
@@ -103,7 +103,7 @@ public class RefreshCommand implements Command {
      */
     private void putHistoryIntoSession(SessionRequestWrapper request) {
 
-        factory = DAOFactory.getInstance();
+        factory = JdbcFactory.getInstance();
         AccountHistoryAPI accountHistory = factory.getDAOAccountHistory();
         AccountAPI account = factory.getDAOAccount();
         int userId = (Integer) request.getSession().getAttribute("userId");

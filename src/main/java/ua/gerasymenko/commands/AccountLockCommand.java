@@ -2,8 +2,7 @@ package ua.gerasymenko.commands;
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
 import ua.gerasymenko.dao.AccountAPI;
-import ua.gerasymenko.dao.JdbcAccount;
-import ua.gerasymenko.dao.DAOFactory;
+import ua.gerasymenko.dao.JdbcFactory;
 import ua.gerasymenko.models.Account;
 import ua.gerasymenko.models.AccountHistory;
 import ua.gerasymenko.models.OperationType;
@@ -53,8 +52,8 @@ public class AccountLockCommand implements Command {
         request.getSession().setAttribute("path", path);
 
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        AccountAPI account = daoFactory.getDAOAccount();
+        JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+        AccountAPI account = jdbcFactory.getDAOAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("lock").split(" ")[0];

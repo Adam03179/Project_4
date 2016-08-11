@@ -22,6 +22,7 @@ import java.util.Random;
  */
 public class AttachCardCommand implements Command {
     private static AttachCardCommand instance = null;
+    private JdbcFactory jdbcFactory = JdbcFactory.getInstance();
 
     private AttachCardCommand() {
     }
@@ -45,21 +46,9 @@ public class AttachCardCommand implements Command {
     @Override
     public String execute(SessionRequestWrapper request) {
 
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        AccountAPI account = daoFactory.getDAOAccount();
-
-        String numberOfAccount = request.getValueByName("account");
-        Integer accountId = account.getId(numberOfAccount);
-        String standard = request.getValueByName("standard");
-        Integer pin = Integer.parseInt(request.getValueByName("pin"));
-        Calendar year = GregorianCalendar.getInstance();
-        year.add(Calendar.YEAR, 1);
-        Date expirationDate = new Date(year.getTime().getTime());
         String cardNum = generateCardNumber().toString();
-        Account accountForCard = account.read(accountId);
-
-        Card card = new Card(accountForCard, cardNum, pin, expirationDate, standard);
-        CardAPI attachedCard = daoFactory.getDAOCard();
+        Card card = createCardFromRequest(request, cardNum);
+        CardAPI attachedCard = jdbcFactory.getDAOCard();
 
         boolean isCardCreated = false;
 
@@ -99,5 +88,23 @@ public class AttachCardCommand implements Command {
         }
 
         return result;
+    }
+
+    private Card createCardFromRequest(SessionRequestWrapper request,
+                                       String cardNum){
+
+        AccountAPI account = jdbcFactory.getDAOAccount();
+
+        String numberOfAccount = request.getValueByName("account");
+        Integer accountId = account.getId(numberOfAccount);
+        String standard = request.getValueByName("standard");
+        Integer pin = Integer.parseInt(request.getValueByName("pin"));
+        Calendar year = GregorianCalendar.getInstance();
+        year.add(Calendar.YEAR, 1);
+        Date expirationDate = new Date(year.getTime().getTime());
+        Account accountForCard = account.read(accountId);
+
+        return new Card(accountForCard, cardNum, pin, expirationDate, standard);
+
     }
 }

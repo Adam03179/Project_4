@@ -2,7 +2,7 @@ package ua.gerasymenko.commands;
 
 
 import ua.gerasymenko.controllers.SessionRequestWrapper;
-import ua.gerasymenko.dao.DAOFactory;
+import ua.gerasymenko.dao.JdbcFactory;
 import ua.gerasymenko.dao.UserAPI;
 import ua.gerasymenko.managers.ConfigurationManager;
 
@@ -44,7 +44,7 @@ public class LoginCommand implements Command {
         String email = request.getValueByName("email");
         String password = request.getValueByName("password");
         String path;
-        DAOFactory factory = DAOFactory.getInstance();
+        JdbcFactory factory = JdbcFactory.getInstance();
         UserAPI user = factory.getDAOUser();
         boolean isExist = user.isExist(email, password);
 

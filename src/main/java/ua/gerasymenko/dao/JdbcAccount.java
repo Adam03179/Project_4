@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
  */
 public class JdbcAccount implements AccountAPI {
     private DataSource dataSource;
-    private DAOFactory daoFactory;
+    private JdbcFactory jdbcFactory;
 
     private static final Logger logger = Logger.getLogger(JdbcAccount.class);
 
@@ -29,7 +29,7 @@ public class JdbcAccount implements AccountAPI {
             ResourceBundle.getBundle("requestsql");
 
     public JdbcAccount(DataSource dataSource) {
-        this.daoFactory = DAOFactory.getInstance();
+        this.jdbcFactory = JdbcFactory.getInstance();
         this.dataSource = dataSource;
     }
 
@@ -75,7 +75,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psLockAccount = connection.prepareStatement
@@ -108,7 +108,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement preparedStatement = connection.prepareStatement
@@ -169,7 +169,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psAddFunds = connection.prepareStatement
@@ -205,7 +205,7 @@ public class JdbcAccount implements AccountAPI {
         connection.setAutoCommit(false);
 
         try {
-            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
@@ -243,7 +243,7 @@ public class JdbcAccount implements AccountAPI {
         connection.setAutoCommit(false);
 
         try {
-            JdbcAccountHistory historyDAO = daoFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
@@ -408,7 +408,7 @@ public class JdbcAccount implements AccountAPI {
             boolean isBlocked = resultSet.getBoolean("is_blocked");
             int usersId = resultSet.getInt("users_id");
 
-            JdbcUser jdbcUser = daoFactory.getDAOUser();
+            JdbcUser jdbcUser = jdbcFactory.getDAOUser();
             User user = jdbcUser.read(usersId);
 
             return new Account(id, user, number, interest,

@@ -43,6 +43,28 @@ public class RegistrationCommand implements Command {
         String path = ConfigurationManager.getProperty("path.page.registration");
         request.getSession().setAttribute("path", path);
 
+        User newUser = createUserFromRequest(request);
+
+        JdbcFactory factory = JdbcFactory.getInstance();
+        UserAPI user = factory.getDAOUser();
+
+        boolean isUserAdded = user.create(newUser);
+        Contacts newContacts = createContactsFromRequest(request,newUser);
+        ContactsAPI contacts = factory.getDAOContacts();
+        boolean isContactsAdded = contacts.create(newContacts);
+
+        if (isContactsAdded && isUserAdded) {
+            path = ConfigurationManager.getProperty("path.page.index");
+            request.getSession().setAttribute("path", path);
+        } else {
+            path = ConfigurationManager.getProperty("path.page.error");
+            request.getSession().setAttribute("path", path);
+        }
+        return path;
+
+    }
+
+    private User createUserFromRequest(SessionRequestWrapper request){
         String name = request.getValueByName("name");
         String surname = request.getValueByName("surname");
         String individualTaxNumber = request.getValueByName("taxNumber");
@@ -52,13 +74,12 @@ public class RegistrationCommand implements Command {
                 Integer.parseInt(request.getValueByName("numberOfPassport"));
         String seriesOfPassport = request.getValueByName("seriesOfPassport");
 
-        User userForContacts = new User(name, surname, individualTaxNumber, logIn,
+        return new User(name, surname, individualTaxNumber, logIn,
                 password, numberOfPassport, seriesOfPassport, false);
+    }
 
-        DAOFactory factory = DAOFactory.getInstance();
-        UserAPI user = factory.getDAOUser();
-
-        boolean isUserAdded = user.create(userForContacts);
+    private Contacts createContactsFromRequest(SessionRequestWrapper request,
+                                               User newUser){
 
         String city = request.getValueByName("city");
         int postCode = Integer.parseInt(request.getValueByName("postCode"));
@@ -69,23 +90,8 @@ public class RegistrationCommand implements Command {
         String email = request.getValueByName("email");
         String region = request.getValueByName("region");
 
-        Contacts newContacts = new Contacts(userForContacts, postCode, region, city, street,
+        return new Contacts(newUser, postCode, region, city, street,
                 numberOfHouse, numberOfApartment, telephoneNumber, email);
-
-
-        ContactsAPI contacts = factory.getDAOContacts();
-
-        boolean isContactsAdded = contacts.create(newContacts);
-
-
-        if (isContactsAdded && isUserAdded) {
-            path = ConfigurationManager.getProperty("path.page.index");
-            request.getSession().setAttribute("path", path);
-        } else {
-            path = ConfigurationManager.getProperty("path.page.error");
-            request.getSession().setAttribute("path", path);
-        }
-        return path;
 
     }
 }
