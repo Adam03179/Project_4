@@ -17,7 +17,8 @@ import java.util.Random;
  * This class is Singleton.
  * It implements interface Command, and it is part of Command and Factory patterns.
  * It includes two methods, execute() - responsible for execution basic task, and
- *  private method generateCardNumber() which needed only for generate number of account.
+ * private method generateCardNumber() which needed only for generate number of account.
+ *
  * @author Igor Gerasymenko
  */
 public class AttachCardCommand implements Command {
@@ -40,7 +41,8 @@ public class AttachCardCommand implements Command {
      * It uses SessionRequestWrapper to initialized all needed parameters
      * for creating Card class. If operation was success
      * it returns path to success-page to user, if not - error page.
-     * @param  request
+     *
+     * @param request
      * @return path to next page
      */
     @Override
@@ -48,7 +50,7 @@ public class AttachCardCommand implements Command {
 
         String cardNum = generateCardNumber().toString();
         Card card = createCardFromRequest(request, cardNum);
-        CardAPI attachedCard = jdbcFactory.getDAOCard();
+        CardAPI attachedCard = jdbcFactory.getJdbcCard();
 
         boolean isCardCreated = false;
 
@@ -90,10 +92,19 @@ public class AttachCardCommand implements Command {
         return result;
     }
 
+    /**
+     * Private method createCardFromRequest(SessionRequestWrapper request,
+     * String cardNum) needs for creating object of Card.class with parameters,
+     * that came in the request.
+     *
+     * @param request
+     * @param cardNum
+     * @return new Card object .
+     */
     private Card createCardFromRequest(SessionRequestWrapper request,
-                                       String cardNum){
+                                       String cardNum) {
 
-        AccountAPI account = jdbcFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getJdbcAccount();
 
         String numberOfAccount = request.getValueByName("account");
         Integer accountId = account.getId(numberOfAccount);

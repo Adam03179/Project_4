@@ -53,7 +53,7 @@ public class AccountLockCommand implements Command {
 
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
-        AccountAPI account = jdbcFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getJdbcAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("lock").split(" ")[0];

@@ -46,11 +46,11 @@ public class RegistrationCommand implements Command {
         User newUser = createUserFromRequest(request);
 
         JdbcFactory factory = JdbcFactory.getInstance();
-        UserAPI user = factory.getDAOUser();
+        UserAPI user = factory.getJdbcUser();
 
         boolean isUserAdded = user.create(newUser);
-        Contacts newContacts = createContactsFromRequest(request,newUser);
-        ContactsAPI contacts = factory.getDAOContacts();
+        Contacts newContacts = createContactsFromRequest(request, newUser);
+        ContactsAPI contacts = factory.getJdbcContacts();
         boolean isContactsAdded = contacts.create(newContacts);
 
         if (isContactsAdded && isUserAdded) {
@@ -64,7 +64,15 @@ public class RegistrationCommand implements Command {
 
     }
 
-    private User createUserFromRequest(SessionRequestWrapper request){
+    /**
+     * Private method createUserFromRequest(SessionRequestWrapper request)
+     * needs for creating object of User.class with parameters,
+     * that came in the request.
+     *
+     * @param request
+     * @return new User object .
+     */
+    private User createUserFromRequest(SessionRequestWrapper request) {
         String name = request.getValueByName("name");
         String surname = request.getValueByName("surname");
         String individualTaxNumber = request.getValueByName("taxNumber");
@@ -78,8 +86,18 @@ public class RegistrationCommand implements Command {
                 password, numberOfPassport, seriesOfPassport, false);
     }
 
+    /**
+     * Private method createContactsFromRequest(SessionRequestWrapper request,
+     * User newUser)
+     * needs for creating object of Contacts.class with parameters,
+     * that came in the request.
+     *
+     * @param request
+     * @param newUser
+     * @return new Contacts object .
+     */
     private Contacts createContactsFromRequest(SessionRequestWrapper request,
-                                               User newUser){
+                                               User newUser) {
 
         String city = request.getValueByName("city");
         int postCode = Integer.parseInt(request.getValueByName("postCode"));

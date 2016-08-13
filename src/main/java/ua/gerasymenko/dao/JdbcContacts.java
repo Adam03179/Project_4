@@ -67,6 +67,12 @@ public class JdbcContacts implements ContactsAPI {
 
     }
 
+    /**
+     * This method seeks in database the Contacts by ID
+     *
+     * @param id
+     * @return Contacts object
+     */
     @Override
     public Contacts read(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -85,6 +91,12 @@ public class JdbcContacts implements ContactsAPI {
         }
     }
 
+    /**
+     * This method erases the Contacts from database, by id
+     *
+     * @param id
+     * @return  true - if operation successful, false - if operation failed.
+     */
     @Override
     public boolean delete(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -93,8 +105,9 @@ public class JdbcContacts implements ContactsAPI {
 
             psDelete.setInt(1, id);
 
-            ResultSet resultSet = psDelete.executeQuery();
-            return resultSet.next();
+            psDelete.executeUpdate();
+
+            return true;
 
         } catch (SQLException e) {
             logger.error("delete contacts error ", e);
@@ -152,7 +165,7 @@ public class JdbcContacts implements ContactsAPI {
             String telephoneNum = resultSet.getString("telephone_number");
             String email = resultSet.getString("email");
 
-            JdbcUser jdbcUser = jdbcFactory.getDAOUser();
+            JdbcUser jdbcUser = jdbcFactory.getJdbcUser();
             User user = jdbcUser.read(userId);
             return new Contacts(user, postCode, region, city, street,
                     numOfHouse, numOfApartment, telephoneNum, email, id);

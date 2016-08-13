@@ -191,6 +191,13 @@ public class JdbcUser implements UserAPI {
 
     }
 
+
+    /**
+     * This method erases the User from database, by id
+     *
+     * @param id
+     * @return  true - if operation successful, false - if operation failed.
+     */
     @Override
     public boolean delete(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -199,8 +206,9 @@ public class JdbcUser implements UserAPI {
 
             psDelete.setInt(1, id);
 
-            ResultSet resultSet = psDelete.executeQuery();
-            return resultSet.next();
+            psDelete.executeUpdate();
+
+            return true;
 
         } catch (SQLException e) {
             logger.error("delete user error ", e);

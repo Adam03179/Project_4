@@ -53,13 +53,13 @@ public class OpenAccountCommand implements Command {
         String currency = "UAH";
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
-        UserAPI user = jdbcFactory.getDAOUser();
+        UserAPI user = jdbcFactory.getJdbcUser();
 
         Account newAccount = new Account(user.read(userId),
                 numberOfAccount, interest, openDate, balance, currency,
                 false);
 
-        AccountAPI account = jdbcFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getJdbcAccount();
         boolean isAccountCreated = false;
 
         while (!account.isExist(numberOfAccount)) {

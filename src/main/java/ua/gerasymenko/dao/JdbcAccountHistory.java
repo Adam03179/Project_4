@@ -33,7 +33,12 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
         this.jdbcFactory = JdbcFactory.getInstance();
     }
 
-
+    /**
+     * This method adds information about new history to database.
+     *
+     * @param history
+     * @return true - if operation successful, false - if operation failed.
+     */
     public boolean create(AccountHistory history) {
 
         try (Connection connection = dataSource.getConnection()) {
@@ -55,6 +60,12 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
 
     }
 
+    /**
+     * This method seeks in database the accountHistory by ID
+     *
+     * @param id
+     * @return AccountHistory object
+     */
     @Override
     public AccountHistory read(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -73,6 +84,12 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
         }
     }
 
+    /**
+     * This method erases the accountHistory from database, by id
+     *
+     * @param id
+     * @return  true - if operation successful, false - if operation failed.
+     */
     @Override
     public boolean delete(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -81,8 +98,10 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
 
             psDelete.setInt(1, id);
 
-            ResultSet resultSet = psDelete.executeQuery();
-            return resultSet.next();
+            psDelete.executeUpdate();
+
+            return true;
+
 
         } catch (SQLException e) {
             logger.error("delete history error ", e);
@@ -171,7 +190,7 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
             OperationType operationType = OperationType.valueOf
                     (resultSet.getString("operation_type").toUpperCase());
 
-            JdbcAccount jdbcAccount = jdbcFactory.getDAOAccount();
+            JdbcAccount jdbcAccount = jdbcFactory.getJdbcAccount();
             Account account = jdbcAccount.read(accountId);
 
             return new AccountHistory(id, account, sum, partnerName,

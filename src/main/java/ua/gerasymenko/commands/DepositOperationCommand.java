@@ -51,7 +51,7 @@ public class DepositOperationCommand implements Command {
         request.getSession().setAttribute("path", path);
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
-        AccountAPI account = jdbcFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getJdbcAccount();
 
         String accountNumber = request.getValueByName("deposit");
         BigDecimal sum = new BigDecimal(request.getValueByName("sum"));

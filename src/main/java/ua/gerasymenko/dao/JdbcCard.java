@@ -58,7 +58,12 @@ public class JdbcCard implements CardAPI {
 
 
     }
-
+    /**
+     * This method seeks in database the card by ID
+     *
+     * @param id
+     * @return Card object
+     */
     @Override
     public Card read(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -77,6 +82,12 @@ public class JdbcCard implements CardAPI {
         }
     }
 
+    /**
+     * This method erases the Card from database, by id
+     *
+     * @param id
+     * @return  true - if operation successful, false - if operation failed.
+     */
     @Override
     public boolean delete(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -85,8 +96,10 @@ public class JdbcCard implements CardAPI {
 
             psDelete.setInt(1, id);
 
-            ResultSet resultSet = psDelete.executeQuery();
-            return resultSet.next();
+            psDelete.executeUpdate();
+
+            return true;
+
 
         } catch (SQLException e) {
             logger.error("delete card error ", e);
@@ -164,7 +177,7 @@ public class JdbcCard implements CardAPI {
             int pin = resultSet.getInt("pin_code");
             Date expirationDate = resultSet.getDate("expiration_date");
 
-            JdbcAccount jdbcAccount = jdbcFactory.getDAOAccount();
+            JdbcAccount jdbcAccount = jdbcFactory.getJdbcAccount();
             Account account = jdbcAccount.read(accountId);
 
 

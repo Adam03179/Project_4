@@ -75,7 +75,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psLockAccount = connection.prepareStatement
@@ -108,7 +108,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement preparedStatement = connection.prepareStatement
@@ -169,7 +169,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psAddFunds = connection.prepareStatement
@@ -205,7 +205,7 @@ public class JdbcAccount implements AccountAPI {
         connection.setAutoCommit(false);
 
         try {
-            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
@@ -243,7 +243,7 @@ public class JdbcAccount implements AccountAPI {
         connection.setAutoCommit(false);
 
         try {
-            JdbcAccountHistory historyDAO = jdbcFactory.getDAOAccountHistory();
+            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
             historyDAO.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
@@ -348,6 +348,13 @@ public class JdbcAccount implements AccountAPI {
 
     }
 
+    /**
+     * This method erases the account from database, by id
+     *
+     * @param id
+     * @return  true - if operation successful, false - if operation failed.
+     */
+
     @Override
     public boolean delete(int id) {
         try (Connection connection = dataSource.getConnection()) {
@@ -356,8 +363,10 @@ public class JdbcAccount implements AccountAPI {
 
             psDelete.setInt(1, id);
 
-            ResultSet resultSet = psDelete.executeQuery();
-            return resultSet.next();
+            psDelete.executeUpdate();
+
+            return true;
+
 
         } catch (SQLException e) {
             logger.error("delete account error ", e);
@@ -408,7 +417,7 @@ public class JdbcAccount implements AccountAPI {
             boolean isBlocked = resultSet.getBoolean("is_blocked");
             int usersId = resultSet.getInt("users_id");
 
-            JdbcUser jdbcUser = jdbcFactory.getDAOUser();
+            JdbcUser jdbcUser = jdbcFactory.getJdbcUser();
             User user = jdbcUser.read(usersId);
 
             return new Account(id, user, number, interest,

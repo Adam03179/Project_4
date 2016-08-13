@@ -45,7 +45,7 @@ public class LoginCommand implements Command {
         String password = request.getValueByName("password");
         String path;
         JdbcFactory factory = JdbcFactory.getInstance();
-        UserAPI user = factory.getDAOUser();
+        UserAPI user = factory.getJdbcUser();
         boolean isExist = user.isExist(email, password);
 
         if (isExist) {

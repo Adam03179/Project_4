@@ -31,23 +31,23 @@ public class JdbcFactory {
         return instance;
     }
 
-    public JdbcAccount getDAOAccount() {
+    public JdbcAccount getJdbcAccount() {
         return new JdbcAccount(dataSource);
     }
 
-    public JdbcAccountHistory getDAOAccountHistory() {
+    public JdbcAccountHistory getJdbcAccountHistory() {
         return new JdbcAccountHistory(dataSource);
     }
 
-    public JdbcCard getDAOCard() {
+    public JdbcCard getJdbcCard() {
         return new JdbcCard(dataSource);
     }
 
-    public JdbcUser getDAOUser() {
+    public JdbcUser getJdbcUser() {
         return new JdbcUser(dataSource);
     }
 
-    public JdbcContacts getDAOContacts() {
+    public JdbcContacts getJdbcContacts() {
         return new JdbcContacts(dataSource);
     }
 

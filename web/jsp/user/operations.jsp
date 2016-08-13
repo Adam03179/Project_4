@@ -11,30 +11,27 @@
 <br>
 
 <div class="mainPage">
-  <form action="${pageContext.request.contextPath}/payments" method="post">
 
-    <form action="${pageContext.request.contextPath}/payments" method="post">
+    <form action="${pageContext.request.contextPath}/payments" method="get">
       <input type="hidden" name="Confirm" value="Deposit"/>
       <input type="submit" value=<fmt:message key="DEPOSIT_OPERATION"/>>
     </form>
 
-    <form action="${pageContext.request.contextPath}/payments" method="post">
+    <form action="${pageContext.request.contextPath}/payments" method="get">
       <input type="hidden" name="Confirm" value="withdraw_funds"/>
       <input type="submit" value=<fmt:message key="WITHDRAW_FUNDS"/>>
     </form>
 
-    <form action="${pageContext.request.contextPath}/payments" method="post">
+    <form action="${pageContext.request.contextPath}/payments" method="get">
       <input type="hidden" name="Confirm" value="transfer"/>
       <input type="submit" value=<fmt:message key="DO_PAYMENT"/>>
     </form>
 
-    <form action="${pageContext.request.contextPath}/payments" method="post">
+    <form action="${pageContext.request.contextPath}/payments" method="get">
       <input type="hidden" name="Confirm" value="show_history"/>
       <input type="submit" value=<fmt:message key="SHOW_HISTORY"/>>
     </form>
 
-
-  </form>
 
 </div>
 </body>

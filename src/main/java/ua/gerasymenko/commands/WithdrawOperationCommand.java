@@ -51,7 +51,7 @@ public class WithdrawOperationCommand implements Command {
         request.getSession().setAttribute("path", path);
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
-        AccountAPI account = jdbcFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getJdbcAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("withdraw").split(" ")[0];

@@ -62,7 +62,7 @@ public class RefreshCommand implements Command {
     private void putAccountsIntoSession(SessionRequestWrapper request) {
 
         factory = JdbcFactory.getInstance();
-        AccountAPI account = factory.getDAOAccount();
+        AccountAPI account = factory.getJdbcAccount();
 
         int userId = (Integer) request.getSession().getAttribute("userId");
 
@@ -80,8 +80,8 @@ public class RefreshCommand implements Command {
     private void putCardsIntoSession(SessionRequestWrapper request) {
 
         factory = JdbcFactory.getInstance();
-        AccountAPI account = factory.getDAOAccount();
-        CardAPI card = factory.getDAOCard();
+        AccountAPI account = factory.getJdbcAccount();
+        CardAPI card = factory.getJdbcCard();
         int userId = (Integer) request.getSession().getAttribute("userId");
 
         List<Account> accountList = account.getAllAccounts(userId);
@@ -104,8 +104,8 @@ public class RefreshCommand implements Command {
     private void putHistoryIntoSession(SessionRequestWrapper request) {
 
         factory = JdbcFactory.getInstance();
-        AccountHistoryAPI accountHistory = factory.getDAOAccountHistory();
-        AccountAPI account = factory.getDAOAccount();
+        AccountHistoryAPI accountHistory = factory.getJdbcAccountHistory();
+        AccountAPI account = factory.getJdbcAccount();
         int userId = (Integer) request.getSession().getAttribute("userId");
 
         List<AccountHistory> historyList = new ArrayList<>();

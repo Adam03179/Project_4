@@ -50,7 +50,7 @@ public class AccountUnlockCommand implements Command {
         String path = ConfigurationManager.getProperty("path.page.index");
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
-        AccountAPI account = jdbcFactory.getDAOAccount();
+        AccountAPI account = jdbcFactory.getJdbcAccount();
 
         //in request we have number of account and sum, so what we need to split request
         String numberOfAccount = request.getValueByName("unlock").split(" ")[0];

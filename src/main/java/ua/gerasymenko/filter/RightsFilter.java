@@ -50,7 +50,7 @@ public class RightsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
-        UserAPI user = jdbcFactory.getDAOUser();
+        UserAPI user = jdbcFactory.getJdbcUser();
 
         String logIn = req.getParameter("email");
         String password = req.getParameter("password");
@@ -64,7 +64,7 @@ public class RightsFilter implements Filter {
                 RequestDispatcher dispatcher = servletRequest.getServletContext()
                         .getRequestDispatcher(ConfigurationManager
                                 .getProperty("path.page.admin"));
-                AccountAPI account = jdbcFactory.getDAOAccount();
+                AccountAPI account = jdbcFactory.getJdbcAccount();
                 List<Account> lockedList = account.getAllLockedAccounts();
                 req.getSession().setAttribute("lockedList", lockedList);
                 req.getSession().setAttribute("path",ConfigurationManager
