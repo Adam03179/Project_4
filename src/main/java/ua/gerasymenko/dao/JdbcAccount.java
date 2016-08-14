@@ -15,21 +15,23 @@ import java.util.ResourceBundle;
 
 /**
  * The JdbcAccount class responds for getting and putting information about
- * bank account into and from database.
+ * bank account into and from database with jdbc help.
  *
  * @author Igor Gerasymenko
  */
 public class JdbcAccount implements AccountAPI {
-    private DataSource dataSource;
-    private JdbcFactory jdbcFactory;
-
     private static final Logger logger = Logger.getLogger(JdbcAccount.class);
-
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
+    private JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+    private AccountHistoryAPI historyAPI;
+    private UserAPI userAPI;
+    private DataSource dataSource;
+
     public JdbcAccount(DataSource dataSource) {
-        this.jdbcFactory = JdbcFactory.getInstance();
+        historyAPI = jdbcFactory.getJdbcAccountHistory();
+        userAPI = jdbcFactory.getJdbcUser();
         this.dataSource = dataSource;
     }
 
@@ -75,8 +77,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
-            historyDAO.writeHistory(history, connection);
+            historyAPI.writeHistory(history, connection);
 
             PreparedStatement psLockAccount = connection.prepareStatement
                     (resourceBundle.getString("LOCK_ACCOUNT"));
@@ -108,8 +109,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
-            historyDAO.writeHistory(history, connection);
+            historyAPI.writeHistory(history, connection);
 
             PreparedStatement preparedStatement = connection.prepareStatement
                     (resourceBundle.getString("UNLOCK_ACCOUNT"));
@@ -169,8 +169,7 @@ public class JdbcAccount implements AccountAPI {
 
         try {
 
-            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
-            historyDAO.writeHistory(history, connection);
+            historyAPI.writeHistory(history, connection);
 
             PreparedStatement psAddFunds = connection.prepareStatement
                     (resourceBundle.getString("ADD_FUNDS"));
@@ -205,8 +204,7 @@ public class JdbcAccount implements AccountAPI {
         connection.setAutoCommit(false);
 
         try {
-            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
-            historyDAO.writeHistory(history, connection);
+            historyAPI.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
                     (resourceBundle.getString("WITHDRAW_FUNDS"));
@@ -243,8 +241,7 @@ public class JdbcAccount implements AccountAPI {
         connection.setAutoCommit(false);
 
         try {
-            JdbcAccountHistory historyDAO = jdbcFactory.getJdbcAccountHistory();
-            historyDAO.writeHistory(history, connection);
+            historyAPI.writeHistory(history, connection);
 
             PreparedStatement psWithdrawFunds = connection.prepareStatement
                     (resourceBundle.getString("WITHDRAW_FUNDS"));
@@ -252,7 +249,7 @@ public class JdbcAccount implements AccountAPI {
             psWithdrawFunds.setInt(2, history.getAccount().getId());
             psWithdrawFunds.executeUpdate();
 
-            historyDAO.writeHistory(partnersHistory, connection);
+            historyAPI.writeHistory(partnersHistory, connection);
 
             PreparedStatement psAddFunds = connection.prepareStatement
                     (resourceBundle.getString("ADD_FUNDS"));
@@ -352,7 +349,7 @@ public class JdbcAccount implements AccountAPI {
      * This method erases the account from database, by id
      *
      * @param id
-     * @return  true - if operation successful, false - if operation failed.
+     * @return true - if operation successful, false - if operation failed.
      */
 
     @Override
@@ -360,13 +357,9 @@ public class JdbcAccount implements AccountAPI {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psDelete = connection.prepareStatement
                     (resourceBundle.getString("DELETE_ACCOUNT"));
-
             psDelete.setInt(1, id);
-
             psDelete.executeUpdate();
-
             return true;
-
 
         } catch (SQLException e) {
             logger.error("delete account error ", e);
@@ -392,7 +385,6 @@ public class JdbcAccount implements AccountAPI {
                 lockedAccounts.add(getAccountFromDB(resultSet));
             }
             return lockedAccounts;
-
         } catch (SQLException e) {
             logger.error("error get all locked accounts", e);
             return null;
@@ -417,8 +409,7 @@ public class JdbcAccount implements AccountAPI {
             boolean isBlocked = resultSet.getBoolean("is_blocked");
             int usersId = resultSet.getInt("users_id");
 
-            JdbcUser jdbcUser = jdbcFactory.getJdbcUser();
-            User user = jdbcUser.read(usersId);
+            User user = userAPI.read(usersId);
 
             return new Account(id, user, number, interest,
                     openDate, balance, currency, isBlocked);

@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * The AccountAPI interface extends GenericDAO interface, this interface
- * needs for separation of the layers of MVC. Class that implements
- * this interface, may work with database.
+ * The AccountAPI extends GenericDAO interface.
+ * It needs for separation of the layers of MVC.
+ * Class that implements this interface, should work with database.
  *
  * @author Igor Gerasymenko
  */

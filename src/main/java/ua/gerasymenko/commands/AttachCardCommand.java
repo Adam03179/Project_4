@@ -59,15 +59,17 @@ public class AttachCardCommand implements Command {
         }
 
         String path;
+
         if (isCardCreated) {
             path = ConfigurationManager.getProperty("path.page.operationSuccess");
             request.getSession().setAttribute("path", path);
-            return path;
+
         } else {
             path = ConfigurationManager.getProperty("path.page.error");
-            request.getSession().setAttribute("path", path);
-            return path;
         }
+
+        return path;
+
     }
 
     /**

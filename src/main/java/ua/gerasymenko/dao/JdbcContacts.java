@@ -16,21 +16,19 @@ import java.util.ResourceBundle;
 
 /**
  * The JdbcContacts class responds for getting and putting information about
- * user's contacts into and from database.
+ * user's contacts into and from database with jdbc help.
  *
  * @author Igor Gerasymenko
  */
 public class JdbcContacts implements ContactsAPI {
-    private DataSource dataSource;
-    private JdbcFactory jdbcFactory;
     private static final Logger logger = Logger.getLogger(JdbcCard.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
-    public JdbcContacts(DataSource dataSource) {
-        this.jdbcFactory = JdbcFactory.getInstance();
-        this.dataSource = dataSource;
+    private DataSource dataSource;
 
+    public JdbcContacts(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     /**
@@ -45,7 +43,6 @@ public class JdbcContacts implements ContactsAPI {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psAddContacts = connection.prepareStatement
                     (resourceBundle.getString("ADD_CONTACTS"));
-
 
             psAddContacts.setString(1, contacts.getCity());
             psAddContacts.setInt(2, contacts.getPostCode());
@@ -95,7 +92,7 @@ public class JdbcContacts implements ContactsAPI {
      * This method erases the Contacts from database, by id
      *
      * @param id
-     * @return  true - if operation successful, false - if operation failed.
+     * @return true - if operation successful, false - if operation failed.
      */
     @Override
     public boolean delete(int id) {
@@ -104,9 +101,7 @@ public class JdbcContacts implements ContactsAPI {
                     (resourceBundle.getString("DELETE_CONTACTS"));
 
             psDelete.setInt(1, id);
-
             psDelete.executeUpdate();
-
             return true;
 
         } catch (SQLException e) {
@@ -129,11 +124,8 @@ public class JdbcContacts implements ContactsAPI {
             PreparedStatement psGetContacts = connection.prepareStatement
                     (resourceBundle.getString("GET_CONTACTS"));
             psGetContacts.setInt(1, userId);
-
             ResultSet resultSet = psGetContacts.executeQuery();
-
             while (resultSet.next()) {
-
                 contacts.add(getContactsFromDb(resultSet));
             }
             return contacts;
@@ -165,8 +157,9 @@ public class JdbcContacts implements ContactsAPI {
             String telephoneNum = resultSet.getString("telephone_number");
             String email = resultSet.getString("email");
 
-            JdbcUser jdbcUser = jdbcFactory.getJdbcUser();
-            User user = jdbcUser.read(userId);
+            JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+            UserAPI userAPI = jdbcFactory.getJdbcUser();
+            User user = userAPI.read(userId);
             return new Contacts(user, postCode, region, city, street,
                     numOfHouse, numOfApartment, telephoneNum, email, id);
 

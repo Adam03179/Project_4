@@ -43,18 +43,20 @@ public class LoginCommand implements Command {
 
         String email = request.getValueByName("email");
         String password = request.getValueByName("password");
-        String path;
         JdbcFactory factory = JdbcFactory.getInstance();
         UserAPI user = factory.getJdbcUser();
         boolean isExist = user.isExist(email, password);
 
+        String path;
+
         if (isExist) {
 
             int userId = user.getId(email);
-            path = ConfigurationManager.getProperty("path.page.main");
-            request.getSession().setAttribute("path", path);
             request.getSession().setAttribute("userId", userId);
             RefreshCommand.getInstance().execute(request);
+
+            path = ConfigurationManager.getProperty("path.page.main");
+            request.getSession().setAttribute("path", path);
         } else {
             path = ConfigurationManager.getProperty("path.page.error");
 

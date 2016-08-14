@@ -48,8 +48,6 @@ public class TransferOperationCommand implements Command {
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-        String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
-        request.getSession().setAttribute("path", path);
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
         AccountAPI account = jdbcFactory.getJdbcAccount();
@@ -67,6 +65,7 @@ public class TransferOperationCommand implements Command {
         Account partnerAccount = account.read(partnerAccountId);
         int compare = sum.compareTo(new BigDecimal(0));
 
+        String path;
         //checks for enough money in the account and the
         // presence of the account partner in the system and amount is a positive number
         if (sum.compareTo(accountForHistory.getBalance()) > 0
@@ -83,11 +82,15 @@ public class TransferOperationCommand implements Command {
                     sum, accountForHistory.getUser().getName() + " "
                     + accountForHistory.getUser().getSurname(), timestamp,
                     OperationType.DEPOSIT);
+            path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
+            request.getSession().setAttribute("path", path);
 
             try {
                 account.transferFunds(accountHistory, partnerHistory);
             } catch (SQLException e) {
                 logger.error("Transfer operation command error", e);
+                return ConfigurationManager.getProperty("path.page.error");
+
             }
         }
         return path;

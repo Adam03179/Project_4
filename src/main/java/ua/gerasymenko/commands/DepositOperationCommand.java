@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
  * This class is Singleton.
  * It implements interface Command, and it is part of Command and Factory patterns.
  * It includes only one method, which executes all needed task.
+ *
  * @author Igor Gerasymenko
  */
 public class DepositOperationCommand implements Command {
@@ -42,13 +43,12 @@ public class DepositOperationCommand implements Command {
      * It uses SessionRequestWrapper to initialized all needed parameters
      * for creating Account class and AccountHistory class. If operation was success
      * it returns path to success-page to user, if not - error page.
-     * @param  request
+     *
+     * @param request
      * @return path to next page
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-        String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
-        request.getSession().setAttribute("path", path);
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
         AccountAPI account = jdbcFactory.getJdbcAccount();
@@ -60,9 +60,11 @@ public class DepositOperationCommand implements Command {
         Account accountForHistory = account.read(accountId);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 
+        String path;
 
         int compare = sum.compareTo(new BigDecimal(0));
         if (compare < 0) {
+
             path = ConfigurationManager.getProperty("path.page.error");
 
         } else {
@@ -71,11 +73,14 @@ public class DepositOperationCommand implements Command {
                     + accountForHistory.getUser().getSurname(), timestamp,
                     OperationType.DEPOSIT);
 
+            path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
+            request.getSession().setAttribute("path", path);
+
             try {
                 account.addFunds(accountHistory);
             } catch (SQLException e) {
                 logger.error("Deposit operation command error", e);
-                return "path.page.error";
+                return ConfigurationManager.getProperty("path.page.error");
             }
         }
 

@@ -47,8 +47,7 @@ public class WithdrawOperationCommand implements Command {
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-        String path = ConfigurationManager.getProperty("path.page.operationSuccessBottom");
-        request.getSession().setAttribute("path", path);
+
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
         AccountAPI account = jdbcFactory.getJdbcAccount();
@@ -62,6 +61,8 @@ public class WithdrawOperationCommand implements Command {
 
         int compare = sum.compareTo(new BigDecimal(0));
 
+        String path;
+
         //checks for enough money in the account and amount is a positive number
         if (sum.compareTo(accountForHistory.getBalance()) > 0 || compare < 0) {
             path = ConfigurationManager.getProperty("path.page.error");
@@ -73,10 +74,15 @@ public class WithdrawOperationCommand implements Command {
 
             try {
                 account.withdrawFunds(accountHistory);
+                path = ConfigurationManager.
+                        getProperty("path.page.operationSuccessBottom");
+                request.getSession().setAttribute("path", path);
             } catch (SQLException e) {
                 logger.error("Withdraw operation command error", e);
+                return ConfigurationManager.getProperty("path.page.error");
             }
         }
+
         return path;
     }
 }

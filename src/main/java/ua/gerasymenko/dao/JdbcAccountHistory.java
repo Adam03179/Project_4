@@ -14,14 +14,13 @@ import java.util.ResourceBundle;
 
 /**
  * The JdbcAccountHistory class responds for getting and putting information about
- * operations history in bank account.
+ * operations history in bank account with jdbc help.
  *
  * @author Igor Gerasymenko
  */
 
 public class JdbcAccountHistory implements AccountHistoryAPI {
     private DataSource dataSource;
-    private JdbcFactory jdbcFactory;
 
     private static final Logger logger =
             Logger.getLogger(JdbcAccountHistory.class);
@@ -30,7 +29,6 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
 
     public JdbcAccountHistory(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.jdbcFactory = JdbcFactory.getInstance();
     }
 
     /**
@@ -88,7 +86,7 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
      * This method erases the accountHistory from database, by id
      *
      * @param id
-     * @return  true - if operation successful, false - if operation failed.
+     * @return true - if operation successful, false - if operation failed.
      */
     @Override
     public boolean delete(int id) {
@@ -99,9 +97,7 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
             psDelete.setInt(1, id);
 
             psDelete.executeUpdate();
-
             return true;
-
 
         } catch (SQLException e) {
             logger.error("delete history error ", e);
@@ -190,8 +186,9 @@ public class JdbcAccountHistory implements AccountHistoryAPI {
             OperationType operationType = OperationType.valueOf
                     (resultSet.getString("operation_type").toUpperCase());
 
-            JdbcAccount jdbcAccount = jdbcFactory.getJdbcAccount();
-            Account account = jdbcAccount.read(accountId);
+            JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+            AccountAPI accountAPI = jdbcFactory.getJdbcAccount();
+            Account account = accountAPI.read(accountId);
 
             return new AccountHistory(id, account, sum, partnerName,
                     operationDate, operationType);

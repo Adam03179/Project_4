@@ -56,10 +56,11 @@ public class RegistrationCommand implements Command {
         if (isContactsAdded && isUserAdded) {
             path = ConfigurationManager.getProperty("path.page.index");
             request.getSession().setAttribute("path", path);
+
         } else {
             path = ConfigurationManager.getProperty("path.page.error");
-            request.getSession().setAttribute("path", path);
         }
+
         return path;
 
     }

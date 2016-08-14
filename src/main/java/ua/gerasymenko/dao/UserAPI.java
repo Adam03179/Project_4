@@ -3,9 +3,9 @@ package ua.gerasymenko.dao;
 import ua.gerasymenko.models.User;
 
 /**
- * The UserAPI interface extends GenericDAO interface, this interface
- * needs for separation of the layers of MVC. Class that implements
- * this interface, may work with database.
+ * The UserAPI extends GenericDAO interface.
+ * It needs for separation of the layers of MVC.
+ * Class that implements this interface, should work with database.
  *
  * @author Igor Gerasymenko
  */

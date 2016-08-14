@@ -12,22 +12,20 @@ import java.util.ResourceBundle;
 
 /**
  * The JdbcCard class responds for getting and putting information about
- * bank cards.
+ * bank cards with jdbc help.
  *
  * @author Igor Gerasymenko
  */
 
 public class JdbcCard implements CardAPI {
-
-    private DataSource dataSource;
-    private JdbcFactory jdbcFactory;
     private static final Logger logger = Logger.getLogger(JdbcCard.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 
+    private DataSource dataSource;
+
     public JdbcCard(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.jdbcFactory = JdbcFactory.getInstance();
     }
 
     /**
@@ -58,6 +56,7 @@ public class JdbcCard implements CardAPI {
 
 
     }
+
     /**
      * This method seeks in database the card by ID
      *
@@ -86,7 +85,7 @@ public class JdbcCard implements CardAPI {
      * This method erases the Card from database, by id
      *
      * @param id
-     * @return  true - if operation successful, false - if operation failed.
+     * @return true - if operation successful, false - if operation failed.
      */
     @Override
     public boolean delete(int id) {
@@ -177,9 +176,9 @@ public class JdbcCard implements CardAPI {
             int pin = resultSet.getInt("pin_code");
             Date expirationDate = resultSet.getDate("expiration_date");
 
-            JdbcAccount jdbcAccount = jdbcFactory.getJdbcAccount();
-            Account account = jdbcAccount.read(accountId);
-
+            JdbcFactory jdbcFactory = JdbcFactory.getInstance();
+            AccountAPI accountAPI = jdbcFactory.getJdbcAccount();
+            Account account = accountAPI.read(accountId);
 
             return new Card(id, account, number, pin, expirationDate, standard);
 

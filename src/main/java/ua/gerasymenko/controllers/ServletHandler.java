@@ -24,7 +24,7 @@ public class ServletHandler extends HttpServlet {
 
     /**
      * This method send all requests to SessionRequestWrapper class for further processing.
-     * It also have forward method, which pushes treated data to user.
+     * After processing pushes treated data to user.
      *
      * @param request
      * @param response

@@ -17,6 +17,7 @@ import java.util.Random;
  * It implements interface Command, and it is part of Command and Factory patterns.
  * It includes one general method, which executes all needed task, and second service
  * method, which randomly generating number of bank account;
+ *
  * @author Igor Gerasymenko
  */
 public class OpenAccountCommand implements Command {
@@ -38,12 +39,12 @@ public class OpenAccountCommand implements Command {
      * It uses SessionRequestWrapper to initialized all needed parameters
      * for creating Account class . If operation was success
      * it returns path to success-page to user, if not - error page.
-     * @param  request
+     *
+     * @param request
      * @return path to next page
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-
 
         int userId = (Integer) request.getSession().getAttribute("userId");
         String numberOfAccount = generateAccountNumber().toString();
@@ -72,7 +73,6 @@ public class OpenAccountCommand implements Command {
             request.getSession().setAttribute("path", path);
         } else {
             path = ConfigurationManager.getProperty("path.page.error");
-            request.getSession().setAttribute("path", path);
         }
         return path;
 

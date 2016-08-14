@@ -6,9 +6,9 @@ import java.util.List;
 
 
 /**
- * The ContactsAPI interface extends GenericDAO interface, this interface
- * needs for separation of the layers of MVC. Class that implements
- * this interface, may work with database.
+ * The ContactsAPI extends GenericDAO interface.
+ * It needs for separation of the layers of MVC.
+ * Class that implements this interface, should work with database.
  *
  * @author Igor Gerasymenko
  */

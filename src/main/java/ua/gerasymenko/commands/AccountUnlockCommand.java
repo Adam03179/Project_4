@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
  * This class is Singleton.
  * It implements interface Command, and it is part of Command and Factory patterns.
  * It includes only one method, which executes all needed task.
+ *
  * @author Igor Gerasymenko
  */
 public class AccountUnlockCommand implements Command {
@@ -41,13 +42,12 @@ public class AccountUnlockCommand implements Command {
      * It uses SessionRequestWrapper to initialized all needed parameters
      * for creating Account class and AccountHistory class. If operation was success
      * it returns path to success-page to user, if not - error page.
-     * @param  request
+     *
+     * @param request
      * @return path to next page
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-
-        String path = ConfigurationManager.getProperty("path.page.index");
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
         AccountAPI account = jdbcFactory.getJdbcAccount();
@@ -59,16 +59,19 @@ public class AccountUnlockCommand implements Command {
 
         Account accountForHistory = account.read(accountId);
 
-
         AccountHistory accountHistory = new AccountHistory(accountForHistory,
                 accountForHistory.getBalance(), accountForHistory.getUser().getName() + " "
                 + accountForHistory.getUser().getSurname(), timestamp,
                 OperationType.UNLOCK);
 
+        String path = ConfigurationManager.getProperty("path.page.adminSuccess");
+
         try {
             account.unlockAccount(accountHistory);
+            request.getSession().setAttribute("path", path);
         } catch (SQLException e) {
             logger.error("Account unlock command error", e);
+            return ConfigurationManager.getProperty("path.page.error");
         }
 
         return path;

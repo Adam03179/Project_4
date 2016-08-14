@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 /**
  * The JdbcUser class responds for getting and putting information about
- * user into and from database.
+ * user into and from database with jdbc help.
  *
  * @author Igor Gerasymenko
  */
@@ -61,6 +61,7 @@ public class JdbcUser implements UserAPI {
 
     /**
      * This method gets user from database.
+     *
      * @param logIn
      * @param password
      * @return User
@@ -177,11 +178,8 @@ public class JdbcUser implements UserAPI {
                     (resourceBundle.getString("GET_USER_BY_ID"));
 
             getUserById.setInt(1, id);
-
             ResultSet resultSet = getUserById.executeQuery();
-
             resultSet.next();
-
             return getUserFromDB(resultSet);
 
         } catch (SQLException e) {
@@ -196,18 +194,15 @@ public class JdbcUser implements UserAPI {
      * This method erases the User from database, by id
      *
      * @param id
-     * @return  true - if operation successful, false - if operation failed.
+     * @return true - if operation successful, false - if operation failed.
      */
     @Override
     public boolean delete(int id) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement psDelete = connection.prepareStatement
                     (resourceBundle.getString("DELETE_USER"));
-
             psDelete.setInt(1, id);
-
             psDelete.executeUpdate();
-
             return true;
 
         } catch (SQLException e) {

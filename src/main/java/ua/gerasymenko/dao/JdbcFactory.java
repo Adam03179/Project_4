@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 /**
  * The JdbcFactory class 'makes' all others Jdbc objects. This class is singleton.
- *
  */
 public class JdbcFactory {
     private static final Logger logger = Logger.getLogger(JdbcFactory.class);
@@ -31,27 +30,25 @@ public class JdbcFactory {
         return instance;
     }
 
-    public JdbcAccount getJdbcAccount() {
+    public AccountAPI getJdbcAccount() {
         return new JdbcAccount(dataSource);
     }
 
-    public JdbcAccountHistory getJdbcAccountHistory() {
+    public AccountHistoryAPI getJdbcAccountHistory() {
         return new JdbcAccountHistory(dataSource);
     }
 
-    public JdbcCard getJdbcCard() {
+    public CardAPI getJdbcCard() {
         return new JdbcCard(dataSource);
     }
 
-    public JdbcUser getJdbcUser() {
+    public UserAPI getJdbcUser() {
         return new JdbcUser(dataSource);
     }
 
-    public JdbcContacts getJdbcContacts() {
+    public ContactsAPI getJdbcContacts() {
         return new JdbcContacts(dataSource);
     }
-
-
 
 
 }

@@ -3,6 +3,7 @@ package ua.gerasymenko.dao;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.mockito.Mockito;
 import ua.gerasymenko.models.Contacts;
 import ua.gerasymenko.models.User;
 
@@ -10,6 +11,7 @@ import static org.junit.Assert.*;
 
 public class JdbcContactsTest {
     private ContactsAPI jdbcContacts;
+
     private User user;
     private Contacts contacts;
 
@@ -28,6 +30,7 @@ public class JdbcContactsTest {
         assertTrue(jdbcContacts.create(contacts));
 
     }
+
 
     @Test
     public void testDeleteContacts() {

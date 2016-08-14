@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
  * This class is Singleton.
  * It implements interface Command, and it is part of Command and Factory patterns.
  * It includes only one method, witch executes all needed task.
+ *
  * @author Igor Gerasymenko
  */
 public class AccountLockCommand implements Command {
@@ -43,14 +44,12 @@ public class AccountLockCommand implements Command {
      * It uses SessionRequestWrapper to initialized all needed parameters
      * for creating Account class and AccountHistory class. If operation was success
      * it returns path to success-page to user, if not - error page.
-     * @param  request
+     *
+     * @param request
      * @return path to next page
      */
     @Override
     public String execute(SessionRequestWrapper request) {
-        String path = ConfigurationManager.getProperty("path.page.operationSuccess");
-        request.getSession().setAttribute("path", path);
-
 
         JdbcFactory jdbcFactory = JdbcFactory.getInstance();
         AccountAPI account = jdbcFactory.getJdbcAccount();
@@ -64,14 +63,18 @@ public class AccountLockCommand implements Command {
         Account accountForHistory = account.read(accountId);
 
         AccountHistory accountHistory = new AccountHistory(accountForHistory,
-                accountForHistory.getBalance(), accountForHistory.getUser().getName()+" "
+                accountForHistory.getBalance(), accountForHistory.getUser().getName() + " "
                 + accountForHistory.getUser().getSurname(), timestamp,
                 OperationType.LOCK);
 
+        String path = ConfigurationManager.getProperty("path.page.operationSuccess");
+
         try {
             account.lockAccount(accountHistory);
+            request.getSession().setAttribute("path", path);
         } catch (SQLException e) {
             logger.error("Account lock command error", e);
+            return ConfigurationManager.getProperty("path.page.error");
         }
 
         return path;
