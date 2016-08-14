@@ -36,7 +36,9 @@ public class SecurityFilter implements Filter {
         allUrls.add("/jsp/user/operationSuccess.jsp");
         allUrls.add("/jsp/user/showAccounts.jsp");
         allUrls.add("/jsp/user/showCards.jsp");
-        allUrls.add("/jsp/user/success.jsp");
+        allUrls.add("/jsp/user/operationSuccess.jsp");
+        allUrls.add("/jsp/user/jsp/user/operationSuccessBot.jsp");
+        allUrls.add("/jsp/admin/successUnlock.jsp");
         allUrls.add("/jsp/user/transferFunds.jsp");
         allUrls.add("/jsp/user/withdraw.jsp");
     }
