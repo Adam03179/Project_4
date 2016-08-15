@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
  * @author Igor Gerasymenko
  */
 public class JdbcContacts implements ContactsAPI {
-    private static final Logger logger = Logger.getLogger(JdbcCard.class);
+    private static final Logger logger = Logger.getLogger(JdbcContacts.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
 

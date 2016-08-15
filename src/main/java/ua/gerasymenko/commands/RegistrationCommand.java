@@ -49,6 +49,10 @@ public class RegistrationCommand implements Command {
         UserAPI user = factory.getJdbcUser();
 
         boolean isUserAdded = user.create(newUser);
+
+        //Setting Id to newUser
+        newUser.setId(user.getId(request.getValueByName("email")));
+
         Contacts newContacts = createContactsFromRequest(request, newUser);
         ContactsAPI contacts = factory.getJdbcContacts();
         boolean isContactsAdded = contacts.create(newContacts);
