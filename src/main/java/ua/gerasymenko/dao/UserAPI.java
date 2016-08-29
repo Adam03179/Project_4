@@ -14,5 +14,8 @@ public interface UserAPI extends GenericDAO<User> {
     public boolean isExist(String logIn, String password);
     public Integer getId(String logIn);
     public boolean isAdmin(int id);
+    public boolean changePassword(int id, String newPassword);
+    public String getPassword(int id);
+
 
 }

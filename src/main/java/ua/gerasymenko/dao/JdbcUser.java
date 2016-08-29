@@ -211,6 +211,58 @@ public class JdbcUser implements UserAPI {
         }
     }
 
+
+    /**
+     * This method changes old password to new password
+     *
+     * @param id
+     * @param newPassword
+     * @return true - if operation successful, false - if operation failed.
+     */
+    @Override
+    public boolean changePassword(int id, String newPassword) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psDelete = connection.prepareStatement
+                    (resourceBundle.getString("CHANGE_PASSWORD"));
+            psDelete.setString(1, newPassword);
+            psDelete.setInt(2, id);
+
+            psDelete.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            logger.error("change password error ", e);
+            return false;
+        }
+    }
+
+    /**
+     * This method seeks in database the password of user
+     *
+     * @param userId
+     * @return id of this user or null if password doesn't exist.
+     */
+    @Override
+    public String getPassword(int userId) {
+
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement psGetPassword = connection.prepareStatement
+                    (resourceBundle.getString("GET_PASSWORD"));
+
+            psGetPassword.setInt(1, userId);
+            ResultSet result = psGetPassword.executeQuery();
+            result.next();
+            return result.getString("password");
+
+
+        } catch (SQLException e) {
+            logger.error("get password error", e);
+            return null;
+        }
+
+    }
+
+
     /**
      * This method needs only for getting user from database by result of ResultSet
      *

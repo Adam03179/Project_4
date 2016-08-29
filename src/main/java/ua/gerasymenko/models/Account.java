@@ -1,5 +1,6 @@
 package ua.gerasymenko.models;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 
@@ -8,9 +9,9 @@ import java.sql.Date;
  *
  * @author Igor Gerasymenko
  */
-public class Account extends Model{
+public class Account extends Model {
 
-    private final User user;
+    private User user;
     private final String number;
     private final double interest;
     private final Date openDate;

@@ -8,7 +8,7 @@ package ua.gerasymenko.models;
 
 public class Contacts extends Model {
     private int id;
-    private final User user;
+    private User user;
     private final int postCode;
     private final String region;
     private final String city;

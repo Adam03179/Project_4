@@ -98,6 +98,11 @@ public class CommandFilter implements Filter {
                 pathSelect(path, servletRequest, servletResponse);
                 return;
             }
+            case "CH_PASS": {
+                String path = ConfigurationManager.getProperty("path.page.changePass");
+                pathSelect(path, servletRequest, servletResponse);
+                return;
+            }
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

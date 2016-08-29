@@ -11,12 +11,13 @@ public class User extends Model{
     private final String surname;
     private final String individualTaxNumber;
     private final String logIn;
-    private final String password;
     private final int numberOfPassport;
     private final String seriesOfPassport;
     private final boolean isAdmin;
+    private String password;
 
-     public User(int id, String name, String surname,
+
+    public User(int id, String name, String surname,
                 String individualTaxNumber, String logIn, String password,
                 int numberOfPassport, String seriesOfPassport,
                 boolean isAdmin) {

@@ -41,6 +41,8 @@ public class SecurityFilter implements Filter {
         allUrls.add("/jsp/admin/successUnlock.jsp");
         allUrls.add("/jsp/user/transferFunds.jsp");
         allUrls.add("/jsp/user/withdraw.jsp");
+        allUrls.add("/jsp/user/changePass.jsp");
+
     }
 
     @Override

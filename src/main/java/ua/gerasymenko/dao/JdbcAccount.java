@@ -6,6 +6,7 @@ import ua.gerasymenko.models.User;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.ResourceBundle;
  *
  * @author Igor Gerasymenko
  */
-public class JdbcAccount implements AccountAPI {
+public class JdbcAccount implements AccountAPI{
     private static final Logger logger = Logger.getLogger(JdbcAccount.class);
     private static final ResourceBundle resourceBundle =
             ResourceBundle.getBundle("requestsql");
@@ -234,7 +235,7 @@ public class JdbcAccount implements AccountAPI {
      * @param history about the operation which will be added in database.
      * @return true - if operation successful, false - if operation failed.
      */
-    public boolean transferFunds(AccountHistory history,
+    public synchronized boolean transferFunds(AccountHistory history,
                                  AccountHistory partnersHistory) throws SQLException {
 
         Connection connection = dataSource.getConnection();
@@ -250,6 +251,7 @@ public class JdbcAccount implements AccountAPI {
             psWithdrawFunds.executeUpdate();
 
             historyAPI.writeHistory(partnersHistory, connection);
+
 
             PreparedStatement psAddFunds = connection.prepareStatement
                     (resourceBundle.getString("ADD_FUNDS"));

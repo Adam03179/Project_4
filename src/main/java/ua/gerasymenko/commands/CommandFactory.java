@@ -31,6 +31,7 @@ public class CommandFactory {
 
     {
         commandMap.put("change_language", ChangeLanguageCommand.getInstance());
+        commandMap.put("Change_pass", ChangePasswordCommand.getInstance());
         commandMap.put("login", LoginCommand.getInstance());
         commandMap.put("registration", RegistrationCommand.getInstance());
         commandMap.put("cancel", EmptyCommand.getInstance());

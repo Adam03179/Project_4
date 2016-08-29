@@ -78,6 +78,7 @@ public class TransferOperationCommand implements Command {
                     + " " + partnerAccount.getUser().getSurname(), timestamp,
                     OperationType.WITHDRAW);
 
+
             AccountHistory partnerHistory = new AccountHistory(partnerAccount,
                     sum, accountForHistory.getUser().getName() + " "
                     + accountForHistory.getUser().getSurname(), timestamp,
@@ -86,6 +87,7 @@ public class TransferOperationCommand implements Command {
             request.getSession().setAttribute("path", path);
 
             try {
+
                 account.transferFunds(accountHistory, partnerHistory);
             } catch (SQLException e) {
                 logger.error("Transfer operation command error", e);
