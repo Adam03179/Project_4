@@ -25,6 +25,8 @@ Perform logging of events, that is, information on emerging exceptions and event
 The code should contain comments. 
 
 
+
+
 “Payment System”by Gerasymenko Igor
 
 Input data: The client has one or more credit cards, each of which corresponds to some accounts in the payments system.
